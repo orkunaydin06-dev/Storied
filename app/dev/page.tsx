@@ -4,9 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Guard: only accessible in development
-if (process.env.NODE_ENV !== 'development') {
-  throw new Error('Dev panel is not available in production.');
-}
 
 type SeedResult = {
   r1Id: string;
@@ -17,6 +14,14 @@ type SeedResult = {
 
 export default function DevPanel() {
   const router = useRouter();
+
+  if (process.env.NODE_ENV !== 'development') {
+    return (
+      <div className="min-h-screen bg-bg-primary flex items-center justify-center">
+        <p className="font-sans text-sm text-fg-subtle">Not found.</p>
+      </div>
+    );
+  }
   const [loading, setLoading] = useState<number | null>(null);
   const [result, setResult] = useState<SeedResult | null>(null);
   const [error, setError] = useState('');
