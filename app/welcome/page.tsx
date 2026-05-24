@@ -19,7 +19,31 @@ function WelcomeContent() {
   const router = useRouter();
 
   useEffect(() => {
-    // Parse hash token from URL (implicit flow from admin-generated links)
+    async function grantBetaAndRedirect(session: { user: { id: string } } | null) {
+      if (!session) return;
+      await fetch('/api/beta-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: 'STORIED_BETA' }),
+      }).catch(() => {});
+      router.push('/begin');
+    }
+
+    // Handle PKCE code in URL (?code=...) — magic link opened in same browser
+    const code = searchParams.get('code');
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(async ({ data, error }) => {
+        if (data.session) {
+          await grantBetaAndRedirect(data.session);
+        } else if (error) {
+          setError('This link expired or was opened in a different browser. Request a new one below.');
+          window.history.replaceState({}, '', '/welcome');
+        }
+      });
+      return;
+    }
+
+    // Handle implicit flow hash tokens (#access_token=...)
     const hash = window.location.hash;
     if (hash) {
       const params = new URLSearchParams(hash.substring(1));
@@ -28,19 +52,12 @@ function WelcomeContent() {
       if (accessToken && refreshToken) {
         supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
           .then(async ({ data: { session } }) => {
-            if (session) {
-              // Grant beta access then redirect
-              await fetch('/api/beta-access', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: 'STORIED_BETA' }),
-              }).catch(() => {});
-              router.push('/begin');
-            }
+            await grantBetaAndRedirect(session);
           });
         return;
       }
     }
+
     // Check existing cookie session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) router.push('/begin');
@@ -49,7 +66,7 @@ function WelcomeContent() {
       if (session) router.push('/begin');
     });
     return () => subscription.unsubscribe();
-  }, [supabase, router]);
+  }, [searchParams, supabase, router]);
 
   // Poll for session after magic link — catches cross-tab sign-ins
   useEffect(() => {
@@ -90,7 +107,7 @@ function WelcomeContent() {
     });
 
     if (error) {
-      setError('Something went wrong. Try again.');
+      setError(error.message ?? 'Something went wrong. Try again.');
       setLoading(false);
     } else {
       setEmailSent(true);
