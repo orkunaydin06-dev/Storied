@@ -74,16 +74,16 @@ export async function POST(req: Request) {
       transcription_completed_at: new Date().toISOString(),
     }).eq('id', recordingId);
 
-    // Trigger feedback generation
+    // Trigger feedback generation — fire and forget, runs in its own invocation
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
-    await fetch(`${baseUrl}/api/internal/generate-feedback`, {
+    fetch(`${baseUrl}/api/internal/generate-feedback`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-cron-secret': process.env.CRON_SECRET ?? '',
       },
       body: JSON.stringify({ recordingId }),
-    });
+    }).catch(() => {});
 
     return Response.json({ data: { ok: true } });
   } catch (err) {
