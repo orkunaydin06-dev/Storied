@@ -14,6 +14,9 @@ type SeedResult = {
 
 export default function DevPanel() {
   const router = useRouter();
+  const [loading, setLoading] = useState<number | null>(null);
+  const [result, setResult] = useState<SeedResult | null>(null);
+  const [error, setError] = useState('');
 
   if (process.env.NODE_ENV !== 'development') {
     return (
@@ -22,9 +25,6 @@ export default function DevPanel() {
       </div>
     );
   }
-  const [loading, setLoading] = useState<number | null>(null);
-  const [result, setResult] = useState<SeedResult | null>(null);
-  const [error, setError] = useState('');
 
   async function seedDay(dayNumber: number) {
     setLoading(dayNumber);
