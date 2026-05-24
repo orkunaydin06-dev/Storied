@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { StructureBreakdown } from '@/components/feedback/StructureBreakdown';
 import { Mic } from 'lucide-react';
+import { ExemplarTab } from './ExemplarTab';
 
 export default async function RevisePage({
   params,
@@ -48,8 +49,6 @@ export default async function RevisePage({
 
   const revisionPrompt = fb?.revision_prompt ?? fb?.narrative ?? '';
   const breakdown = fb?.structure_breakdown;
-  const exemplar = fb?.exemplar ?? null;
-
   const activeTab = tab === 'example' ? 'example' : 'revision';
 
   return (
@@ -70,18 +69,16 @@ export default async function RevisePage({
         >
           Micro-revision
         </Link>
-        {exemplar && (
-          <Link
-            href={`/daily/${dayNumber}/revise?recordingId=${recordingId}&tab=example`}
-            className={`font-sans text-sm pb-3 px-1 border-b-2 ml-4 transition-colors duration-200 ${
-              activeTab === 'example'
-                ? 'border-accent-warm text-fg-primary'
-                : 'border-transparent text-fg-muted hover:text-fg-primary'
-            }`}
-          >
-            How it could be told
-          </Link>
-        )}
+        <Link
+          href={`/daily/${dayNumber}/revise?recordingId=${recordingId}&tab=example`}
+          className={`font-sans text-sm pb-3 px-1 border-b-2 ml-4 transition-colors duration-200 ${
+            activeTab === 'example'
+              ? 'border-accent-warm text-fg-primary'
+              : 'border-transparent text-fg-muted hover:text-fg-primary'
+          }`}
+        >
+          How it could be told
+        </Link>
       </div>
 
       {activeTab === 'revision' ? (
@@ -100,20 +97,10 @@ export default async function RevisePage({
           )}
         </>
       ) : (
-        <div className="mb-12">
-          <p className="font-mono text-xs uppercase tracking-wider text-fg-subtle mb-6">
-            Your story — told through the framework
-          </p>
-          <div className="font-serif text-xl text-fg-primary leading-relaxed whitespace-pre-line">
-            {exemplar}
-          </div>
-          <p className="font-sans text-xs text-fg-subtle mt-8 leading-relaxed">
-            This is your story, retold through the framework. Use it as a reference — not a script. Your second recording should still be yours.
-          </p>
-        </div>
+        <ExemplarTab recordingId={recordingId} initialExemplar={fb?.exemplar ?? null} />
       )}
 
-      <div className="text-center">
+      <div className="text-center mt-4">
         <Link href={`/daily/${dayNumber}/record-2?r1Id=${recordingId}`}>
           <Button size="lg" className="flex items-center gap-2 mx-auto">
             <Mic className="w-4 h-4" aria-hidden="true" />

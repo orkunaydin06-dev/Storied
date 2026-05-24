@@ -150,7 +150,6 @@ export async function POST(req: Request) {
         narrative: result.narrative,
         revision_prompt: result.revision_prompt ?? null,
         structure_breakdown: result.structure_breakdown,
-        exemplar: result.exemplar ?? null,
         model_used: MODEL_USED,
         prompt_version: PROMPT_VERSION,
       });
