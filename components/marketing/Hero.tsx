@@ -1,22 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { HeroWaveform } from './HeroWaveform';
-
 export function Hero() {
-  const [loading, setLoading] = useState(false);
-
-  async function handleCheckout() {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/stripe-checkout', { method: 'POST' });
-      const { url } = await res.json();
-      if (url) window.location.href = url;
-    } catch {
-      setLoading(false);
-    }
-  }
 
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-4 py-32 text-center overflow-hidden">
@@ -90,8 +76,8 @@ export function Hero() {
         className="relative mt-12 animate-fade-in"
         style={{ animationDelay: '350ms' }}
       >
-        <Button size="lg" onClick={handleCheckout} disabled={loading}>
-          {loading ? 'Redirecting...' : 'Begin your practice — $29'}
+        <Button size="lg" onClick={() => window.location.href = '/welcome'}>
+          Begin your practice — $29
         </Button>
       </div>
 

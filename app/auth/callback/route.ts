@@ -81,6 +81,24 @@ export async function GET(request: Request) {
         .eq('id', data.user.id)
         .single();
 
+      // Auto-grant beta access if not yet paid and beta mode is on
+      if (!userData?.paid_at && process.env.BETA_ACCESS_CODE) {
+        await adminClient.from('users').update({
+          paid_at: new Date().toISOString(),
+          amount_paid_cents: 0,
+          pricing_tier: 'beta',
+        }).eq('id', data.user.id);
+
+        await adminClient.from('purchases').upsert({
+          user_id: data.user.id,
+          stripe_session_id: `beta_${data.user.id}`,
+          status: 'completed',
+          amount_cents: 0,
+          pricing_tier: 'beta',
+          completed_at: new Date().toISOString(),
+        }, { onConflict: 'stripe_session_id', ignoreDuplicates: true });
+      }
+
       const isNew = !userData?.has_completed_welcome;
       const base = process.env.NEXT_PUBLIC_APP_URL ?? origin;
       return NextResponse.redirect(`${base}${isNew ? '/begin' : '/dashboard'}`);

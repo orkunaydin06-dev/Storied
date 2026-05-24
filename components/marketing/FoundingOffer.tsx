@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 
 export function FoundingOffer() {
-  const [loading, setLoading] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -23,17 +22,6 @@ export function FoundingOffer() {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-
-  async function handleCheckout() {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/stripe-checkout', { method: 'POST' });
-      const { url } = await res.json();
-      if (url) window.location.href = url;
-    } catch {
-      setLoading(false);
-    }
-  }
 
   return (
     <section
@@ -75,8 +63,8 @@ export function FoundingOffer() {
           The practice is the same. The price is the only thing that changes.
         </p>
 
-        <Button size="lg" onClick={handleCheckout} disabled={loading}>
-          {loading ? 'Redirecting...' : 'Begin your practice — $29'}
+        <Button size="lg" onClick={() => window.location.href = '/welcome'}>
+          Begin your practice — $29
         </Button>
 
         <p className="relative font-sans text-xs text-fg-subtle mt-5">
