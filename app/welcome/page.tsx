@@ -43,6 +43,16 @@ function WelcomeContent() {
     return () => subscription.unsubscribe();
   }, [supabase, router]);
 
+  // Poll for session after magic link — catches cross-tab sign-ins
+  useEffect(() => {
+    if (!emailSent) return;
+    const interval = setInterval(async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) router.push('/begin');
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [emailSent, supabase, router]);
+
   async function handleGoogle() {
     setLoading(true);
     setError('');
