@@ -17,7 +17,7 @@ function ProcessingInner() {
   useEffect(() => {
     if (!recordingId) return;
 
-    const TIMEOUT = 60000;
+    const TIMEOUT = 180000;
     const POLL_INTERVAL = 2000;
     let elapsed = 0;
 

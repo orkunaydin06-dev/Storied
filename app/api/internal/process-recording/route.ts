@@ -2,6 +2,8 @@ import { createServiceRoleClient } from '@/lib/supabase/service-role';
 import OpenAI from 'openai';
 import { z } from 'zod';
 
+export const maxDuration = 300;
+
 const schema = z.object({ recordingId: z.string().uuid() });
 
 export async function POST(req: Request) {

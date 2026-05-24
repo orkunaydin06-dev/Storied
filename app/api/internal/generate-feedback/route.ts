@@ -1,5 +1,7 @@
 import { createServiceRoleClient } from '@/lib/supabase/service-role';
 import { callClaude } from '@/lib/claude';
+
+export const maxDuration = 300;
 import { buildFeedbackPrompt, type FeedbackResponse } from '@/lib/prompts/feedback';
 import { buildComparisonPrompt, type ComparisonResponse } from '@/lib/prompts/comparison';
 import { buildGraduationPrompt, type GraduationResponse } from '@/lib/prompts/graduation';
