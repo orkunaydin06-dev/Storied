@@ -1,0 +1,7 @@
+{
+  "name": "Storied Journey Map",
+  "id": "1234567890",
+  "api": "1.0.0",
+  "editorType": ["figjam"],
+  "main": "code.js"
+}

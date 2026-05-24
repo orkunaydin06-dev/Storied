@@ -179,7 +179,7 @@ Tasks:
 4. Build weekly transition screens (Days 6, 12, 18, 24)
 5. Load curriculum content from /data/curriculum/days.ts
 6. Pass methodology system anchors to AI feedback per 05-ai-feedback-system.md §9
-7. Switch to Haiku for Days 2-29 (cost optimization, sufficient quality)
+7. Use Sonnet for ALL 30 days — quality is non-negotiable. Do NOT use Haiku at any point.
 8. Build dashboard "Day N of 30" state
 9. Build dashboard "Day N complete. Day N+1 unlocks tomorrow" state
 10. Build archive view (/archive) per 03-user-journey.md §8.2

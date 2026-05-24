@@ -1,0 +1,8 @@
+{
+  "name": "Storied Journey Map",
+  "id": "storied-journey-map-001",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figjam"],
+  "documentAccess": "dynamic-page"
+}
