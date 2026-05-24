@@ -77,7 +77,7 @@ export async function GET(request: Request) {
       // New user → /begin, returning user → /dashboard
       const { data: userData } = await adminClient
         .from('users')
-        .select('has_completed_welcome, current_day')
+        .select('has_completed_welcome, current_day, paid_at')
         .eq('id', data.user.id)
         .single();
 
