@@ -27,23 +27,31 @@ export function WaveformStatic({
   async function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
+
     if (isPlaying) {
       audio.pause();
       setIsPlaying(false);
-    } else {
+      return;
+    }
+
+    // Set src dynamically on first play — iOS Safari requires src to be set
+    // inside a user gesture handler, not at render time
+    if (!audio.src || !audio.src.includes('token')) {
+      audio.src = audioUrl;
+      audio.load();
+    }
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+    } catch {
+      // Second attempt after brief delay
+      await new Promise((r) => setTimeout(r, 200));
       try {
         await audio.play();
         setIsPlaying(true);
       } catch {
-        // Try reloading the source then playing
-        audio.load();
-        await new Promise((r) => setTimeout(r, 300));
-        try {
-          await audio.play();
-          setIsPlaying(true);
-        } catch {
-          // Browser restriction — nothing more to do
-        }
+        // Silently fail
       }
     }
   }
@@ -77,7 +85,7 @@ export function WaveformStatic({
         )}
       </button>
 
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         {label && (
           <p className="font-mono text-xs text-fg-subtle uppercase tracking-wider mb-1">
             {label}
@@ -105,12 +113,12 @@ export function WaveformStatic({
         </div>
       </div>
 
+      {/* No src at render time — set dynamically in togglePlay for iOS Safari */}
       <audio
         ref={audioRef}
-        src={audioUrl}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleEnded}
-        preload="auto"
+        preload="none"
       />
     </div>
   );
