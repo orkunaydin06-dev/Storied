@@ -1,4 +1,4 @@
-import { getSupportedMimeType } from './formats';
+import { getSupportedMimeType, normalizeMimeType } from './formats';
 import { extractPeaks } from './waveform';
 
 export interface RecorderState {
@@ -81,7 +81,7 @@ export class AudioRecorder {
       cancelAnimationFrame(this.animationFrame);
 
       this.mediaRecorder.onstop = () => {
-        const mimeType = this.mediaRecorder!.mimeType;
+        const mimeType = normalizeMimeType(this.mediaRecorder!.mimeType);
         const blob = new Blob(this.chunks, { type: mimeType });
         this.mediaRecorder!.stream.getTracks().forEach((t) => t.stop());
         this.audioContext?.close();

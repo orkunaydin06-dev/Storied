@@ -15,6 +15,11 @@ export function getSupportedMimeType(): AudioMimeType {
   return 'audio/webm';
 }
 
+/** Remove whitespace around semicolons so "audio/webm; codecs=opus" → "audio/webm;codecs=opus" */
+export function normalizeMimeType(mimeType: string): string {
+  return mimeType.replace(/\s*;\s*/g, ';').toLowerCase().trim();
+}
+
 export function getFileExtension(mimeType: string): string {
   if (mimeType.includes('mp4')) return 'mp4';
   if (mimeType.includes('ogg')) return 'ogg';
