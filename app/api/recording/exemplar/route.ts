@@ -5,6 +5,27 @@ import { getDayContent } from '@/data/curriculum/days';
 
 export const maxDuration = 60;
 
+// Framework elements per week — used in the prompt and UI
+const FRAMEWORK_ELEMENTS: Record<number, string[]> = {
+  1: ['Beginning', 'Inciting Incident', 'Conflict', 'Recognition', 'Reversal', 'Emotional Release'],
+  2: ['Once Upon a Time', 'Every Day', 'One Day', 'Because of That', 'Until Finally', 'Ever Since Then'],
+  3: ['Call to Adventure', 'Refusal', 'Meeting the Mentor', 'Crossing the Threshold', 'The Ordeal', 'Return Changed'],
+  4: ['Inventio', 'Dispositio', 'Elocutio', 'Movere'],
+  5: ['Voice', 'Authenticity', 'Originality', 'Resonance'],
+};
+
+export type ExemplarSegment = {
+  text: string;
+  element: string;
+  elementIndex: number;
+};
+
+export type AnnotatedExemplar = {
+  segments: ExemplarSegment[];
+  framework: string;
+  elements: string[];
+};
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -15,7 +36,6 @@ export async function POST(req: Request) {
 
   const admin = createServiceRoleClient();
 
-  // Fetch recording + existing feedback
   const { data: recording } = await admin
     .from('recordings')
     .select('id, day_number, transcript, user_id, users(first_name)')
@@ -32,7 +52,14 @@ export async function POST(req: Request) {
     .single();
 
   // Return cached exemplar if already generated
-  if (fb?.exemplar) return Response.json({ data: { exemplar: fb.exemplar } });
+  if (fb?.exemplar) {
+    try {
+      const parsed = JSON.parse(fb.exemplar) as AnnotatedExemplar;
+      return Response.json({ data: { exemplar: parsed } });
+    } catch {
+      // Legacy plain text — will re-generate below
+    }
+  }
 
   const day = getDayContent(recording.day_number);
   if (!day) return Response.json({ error: 'Day not found' }, { status: 404 });
@@ -40,43 +67,72 @@ export async function POST(req: Request) {
   const usersData = recording.users as unknown as { first_name: string | null } | null;
   const firstName = usersData?.first_name ?? 'the storyteller';
 
-  const prompt = `You are writing an exemplar version of a story told by ${firstName}.
+  const elements = FRAMEWORK_ELEMENTS[day.week] ?? FRAMEWORK_ELEMENTS[1];
 
-FRAMEWORK IN FOCUS: ${day.methodologyName}
+  const prompt = `Write an annotated exemplar story for ${firstName} using ${day.methodologyName}.
+
+FRAMEWORK: ${day.methodologyName}
 ${day.methodologyAnchor}
 
-THE QUESTION THEY ANSWERED:
-${day.question}
-
-THEIR ORIGINAL STORY (transcript):
+THEIR ORIGINAL STORY:
 "${recording.transcript}"
 
+FRAMEWORK ELEMENTS TO USE:
+${elements.map((e, i) => `${i + 1}. ${e}`).join('\n')}
+
 YOUR TASK:
-Write a complete, ideal version of their story using this framework perfectly.
+1. Write an ideal version of their story using this framework perfectly.
+   - Use their actual story content, characters, events — do not invent new facts
+   - Write in first person, as if you are them
+   - Apply the framework: every beat must land
+   - Add sensory detail and strong phrasing where they were vague
+   - Total length: 150–250 words
 
-Rules:
-- Use their actual story content, characters, and events — do not invent new facts
-- Write in first person, as if you are them
-- Apply the ${day.methodologyName} framework perfectly — make every beat land
-- Add sensory detail, precise timing, and strong phrasing where their version was vague
-- Length: 150–250 words (about 1.5–2 minutes at natural pace)
-- This is the version they are working towards — make it compelling, specific, and moving
-- Write the story directly. No preamble, no explanation, no title.
+2. Break the story into segments — each segment labeled with its framework element.
+   - A segment can be 1–3 sentences
+   - Every sentence must belong to a segment
+   - Use each element at least once; elements can repeat if the story calls for it
 
-Output only the story text. No JSON. No formatting.`;
+OUTPUT FORMAT (strict JSON, no other text):
+{
+  "segments": [
+    {"text": "...", "element": "Beginning", "elementIndex": 0},
+    {"text": "...", "element": "Inciting Incident", "elementIndex": 1}
+  ]
+}
+
+elementIndex must match the position in the elements list (0-based).`;
 
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 600,
-    temperature: 0.8,
+    max_tokens: 900,
+    temperature: 0.75,
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const exemplar = response.content[0].type === 'text' ? response.content[0].text.trim() : '';
+  const rawText = response.content[0].type === 'text' ? response.content[0].text.trim() : '{}';
 
-  // Cache in DB
-  await admin.from('feedback').update({ exemplar }).eq('recording_id', recordingId);
+  let segments: ExemplarSegment[] = [];
+  try {
+    const jsonStart = rawText.indexOf('{');
+    const jsonEnd = rawText.lastIndexOf('}');
+    const parsed = JSON.parse(rawText.slice(jsonStart, jsonEnd + 1));
+    segments = parsed.segments ?? [];
+  } catch {
+    // Fallback: treat as plain text with a single segment
+    segments = [{ text: rawText, element: elements[0], elementIndex: 0 }];
+  }
 
-  return Response.json({ data: { exemplar } });
+  const annotated: AnnotatedExemplar = {
+    segments,
+    framework: day.methodologyName,
+    elements,
+  };
+
+  await admin.from('feedback')
+    .update({ exemplar: JSON.stringify(annotated) })
+    .eq('recording_id', recordingId);
+
+  return Response.json({ data: { exemplar: annotated } });
 }

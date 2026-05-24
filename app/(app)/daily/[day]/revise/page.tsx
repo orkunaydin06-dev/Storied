@@ -97,7 +97,10 @@ export default async function RevisePage({
           )}
         </>
       ) : (
-        <ExemplarTab recordingId={recordingId} initialExemplar={fb?.exemplar ?? null} />
+        <ExemplarTab
+          recordingId={recordingId}
+          initialExemplar={fb?.exemplar ? (() => { try { return JSON.parse(fb.exemplar); } catch { return null; } })() : null}
+        />
       )}
 
       <div className="text-center mt-4">
