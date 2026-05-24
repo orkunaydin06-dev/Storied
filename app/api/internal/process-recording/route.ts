@@ -1,13 +1,19 @@
 import { createServiceRoleClient } from '@/lib/supabase/service-role';
-import OpenAI from 'openai';
+import Groq from 'groq-sdk';
 import { z } from 'zod';
 
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 const schema = z.object({ recordingId: z.string().uuid() });
 
+const LANG_MAP: Record<string, string> = {
+  english: 'en', turkish: 'tr', spanish: 'es', french: 'fr',
+  german: 'de', italian: 'it', portuguese: 'pt', dutch: 'nl',
+  russian: 'ru', japanese: 'ja', chinese: 'zh', arabic: 'ar',
+  korean: 'ko', hindi: 'hi', polish: 'pl', swedish: 'sv',
+};
+
 export async function POST(req: Request) {
-  // Verify internal secret
   const secret = req.headers.get('x-cron-secret');
   if (secret !== process.env.CRON_SECRET) {
     return Response.json({ error: 'Forbidden' }, { status: 403 });
@@ -20,7 +26,6 @@ export async function POST(req: Request) {
   const { recordingId } = parsed.data;
   const admin = createServiceRoleClient();
 
-  // Fetch recording
   const { data: recording, error: fetchErr } = await admin
     .from('recordings')
     .select('*, users(first_name, email)')
@@ -31,42 +36,32 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Recording not found' }, { status: 404 });
   }
 
-  // Mark as processing
   await admin.from('recordings').update({ feedback_status: 'processing' }).eq('id', recordingId);
 
   try {
-    // Download audio from storage
+    // Download audio
     const { data: audioData, error: downloadErr } = await admin.storage
       .from('recordings')
       .download(recording.storage_path);
 
     if (downloadErr || !audioData) throw new Error('Failed to download audio');
 
-    // Transcribe with Whisper
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const file = new File([audioData], `recording.${recording.mime_type.includes('mp4') ? 'mp4' : 'webm'}`, {
-      type: recording.mime_type,
-    });
+    // Transcribe with Groq Whisper — ~2-3s for 2min audio (vs ~45s with OpenAI)
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const ext = recording.mime_type.includes('mp4') ? 'mp4' : recording.mime_type.includes('ogg') ? 'ogg' : 'webm';
+    const file = new File([audioData], `recording.${ext}`, { type: recording.mime_type });
 
-    const transcription = await openai.audio.transcriptions.create({
+    const transcription = await groq.audio.transcriptions.create({
       file,
-      model: 'whisper-1',
+      model: 'whisper-large-v3-turbo',
       response_format: 'verbose_json',
     });
 
     const transcript = transcription.text ?? '';
-    // Whisper verbose_json returns full names ('english', 'turkish') — normalize to ISO 639-1
-    const rawLang = (transcription.language ?? 'en').toLowerCase();
-    const LANG_MAP: Record<string, string> = {
-      english: 'en', turkish: 'tr', spanish: 'es', french: 'fr',
-      german: 'de', italian: 'it', portuguese: 'pt', dutch: 'nl',
-      russian: 'ru', japanese: 'ja', chinese: 'zh', arabic: 'ar',
-      korean: 'ko', hindi: 'hi', polish: 'pl', swedish: 'sv',
-    };
+    const rawLang = ((transcription as { language?: string }).language ?? 'en').toLowerCase();
     const language = LANG_MAP[rawLang] ?? rawLang;
     const wordCount = transcript.split(/\s+/).filter(Boolean).length;
 
-    // Update recording with transcript
     await admin.from('recordings').update({
       transcript,
       transcript_language: language,
@@ -74,7 +69,7 @@ export async function POST(req: Request) {
       transcription_completed_at: new Date().toISOString(),
     }).eq('id', recordingId);
 
-    // Trigger feedback generation — fire and forget, runs in its own invocation
+    // Trigger feedback generation — fire and forget, separate invocation
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
     fetch(`${baseUrl}/api/internal/generate-feedback`, {
       method: 'POST',
