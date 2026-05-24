@@ -85,6 +85,7 @@ function WelcomeContent() {
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback${sessionId ? `?session_id=${sessionId}` : ''}`,
+        queryParams: { prompt: 'select_account' },
       },
     });
     if (error) {
