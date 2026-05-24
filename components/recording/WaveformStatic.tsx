@@ -20,19 +20,32 @@ export function WaveformStatic({
 }: WaveformStaticProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [canPlay, setCanPlay] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const displayPeaks = peaks.length > 0 ? peaks : Array(40).fill(0.3);
 
-  function togglePlay() {
+  async function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
     if (isPlaying) {
       audio.pause();
+      setIsPlaying(false);
     } else {
-      audio.play();
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch {
+        // Autoplay blocked or format unsupported — reload source and retry
+        audio.load();
+        try {
+          await audio.play();
+          setIsPlaying(true);
+        } catch {
+          // Still blocked — browser restriction, nothing to do
+        }
+      }
     }
-    setIsPlaying(!isPlaying);
   }
 
   function handleTimeUpdate() {
@@ -56,6 +69,7 @@ export function WaveformStatic({
         onClick={togglePlay}
         className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-border-visible text-fg-muted hover:text-fg-primary hover:border-fg-muted transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-border-active focus:ring-offset-2 focus:ring-offset-bg-primary"
         aria-label={isPlaying ? 'Pause recording' : 'Play recording'}
+        disabled={!canPlay && !isPlaying}
       >
         {isPlaying ? (
           <Pause className="w-4 h-4" />
@@ -97,7 +111,9 @@ export function WaveformStatic({
         src={audioUrl}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleEnded}
+        onCanPlay={() => setCanPlay(true)}
         preload="metadata"
+        crossOrigin="anonymous"
       />
     </div>
   );

@@ -57,26 +57,24 @@ export default async function DashboardPage() {
 
         <div className="my-12 border-t border-border-subtle" />
 
-        {isComplete ? (
+        {isComplete && currentDay > 30 ? (
           <div>
             <p className="font-serif text-2xl text-fg-primary mb-3">
-              Day {currentDay} complete.
+              All 30 days complete.
             </p>
-            {currentDay < 30 && (
-              <p className="font-sans text-sm text-fg-muted">
-                Day {currentDay + 1} unlocks tomorrow.
-              </p>
-            )}
-            {currentDay === 30 && (
-              <Link href="/graduation">
-                <Button className="mt-6">View your graduation</Button>
-              </Link>
-            )}
+            <Link href="/graduation">
+              <Button className="mt-6">View your graduation</Button>
+            </Link>
           </div>
         ) : (
           <>
+            {isComplete && (
+              <p className="font-mono text-xs uppercase tracking-wider text-fg-subtle mb-6">
+                Day {currentDay - 1} complete
+              </p>
+            )}
             <h1 className="font-serif text-3xl text-fg-primary mb-10">
-              {"Today's practice is ready."}
+              {isComplete ? `Day ${currentDay} is ready.` : "Today's practice is ready."}
             </h1>
             <Link href={`/daily/${currentDay}`}>
               <Button size="lg">Begin Day {currentDay}</Button>

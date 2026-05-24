@@ -82,6 +82,17 @@ Try something like:
 
 [Optional: a second instruction, 1 sentence]
 
+5. EXEMPLAR — write a complete, ideal version of their story using this week's framework.
+
+   Rules:
+   - Use their actual story content, characters, and events — do not invent new facts
+   - Tell it as if you are them, in first person
+   - Apply the framework perfectly — make every beat land
+   - Add sensory detail, precise timing, and strong phrasing where their version was vague
+   - Length: 150–250 words spoken (about 1.5–2 minutes at natural pace)
+   - This is the version they are working towards. It should be compelling, specific, and moving.
+   - Do not add a preamble like "Here is an example". Just write the story directly.
+
 OUTPUT FORMAT (strict JSON):
 {
   "scores": {
@@ -100,7 +111,8 @@ OUTPUT FORMAT (strict JSON):
     "elements": [
       { "name": "...", "status": "...", "score": "...", "note": "...", "revision_tip": "..." }
     ]
-  }
+  },
+  "exemplar": "..."
 }
 
 Calculate the overall score using:
@@ -127,5 +139,6 @@ export interface FeedbackResponse {
     framework: string;
     elements: Array<{ name: string; status: string; score: string; note: string; revision_tip?: string }>;
   };
+  exemplar?: string;
   edge_case?: string;
 }

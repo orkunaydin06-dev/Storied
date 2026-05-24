@@ -43,7 +43,7 @@ export const CURRICULUM: DayContent[] = [
       "I remember the rain.",
     ],
     closureMessage: "What to carry forward: when you tell stories today — in meetings, in messages, over dinner — start with one concrete detail. Not a summary. A sensation.",
-    targetSeconds: 60,
+    targetSeconds: 120,
   },
   {
     day: 2,
@@ -60,7 +60,7 @@ export const CURRICULUM: DayContent[] = [
       "The conversation took eleven minutes. It changed everything.",
     ],
     closureMessage: "What to carry forward: when you tell a story about disagreement, don't tell us who was right. Tell us where the collision happened.",
-    targetSeconds: 60,
+    targetSeconds: 120,
   },
   {
     day: 3,
@@ -77,7 +77,7 @@ export const CURRICULUM: DayContent[] = [
       "The room was quiet. My head was not.",
     ],
     closureMessage: "What to carry forward: the strongest stories aren't about external dramas. They're about the moment you almost made a different choice.",
-    targetSeconds: 60,
+    targetSeconds: 120,
   },
   {
     day: 4,
@@ -94,7 +94,7 @@ export const CURRICULUM: DayContent[] = [
       "It wasn't an answer. It was a question that wouldn't go away.",
     ],
     closureMessage: "What to carry forward: the best recognition moments aren't shouted. They're whispered to yourself, and you barely hear them.",
-    targetSeconds: 60,
+    targetSeconds: 120,
   },
   {
     day: 5,
@@ -111,7 +111,7 @@ export const CURRICULUM: DayContent[] = [
       "She said one sentence and I knew the deal was off.",
     ],
     closureMessage: "What to carry forward: every story has a moment when the wind changes. Find it. Don't bury it. Name it.",
-    targetSeconds: 60,
+    targetSeconds: 120,
   },
   {
     day: 6,
@@ -128,7 +128,7 @@ export const CURRICULUM: DayContent[] = [
       "I didn't know what I was doing until much later.",
     ],
     closureMessage: "What to carry forward: the stories worth telling are the ones that change you in the telling. Week One done. Aristotle's foundation is yours. Tomorrow, Pixar.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
 
   // ── WEEK 2: PIXAR ────────────────────────────────────────────────────────
@@ -147,7 +147,7 @@ export const CURRICULUM: DayContent[] = [
       "Once upon a time, I thought success looked like inbox zero.",
     ],
     closureMessage: "What to carry forward: when you tell stories today, take a beat to set up \"before.\" Most people rush past it. Don't.",
-    targetSeconds: 75,
+    targetSeconds: 120,
   },
   {
     day: 8,
@@ -164,7 +164,7 @@ export const CURRICULUM: DayContent[] = [
       "Every day, I told myself this was what I wanted.",
     ],
     closureMessage: "What to carry forward: routine isn't boring in a story. Routine is the foundation that gets cracked open. Render it carefully.",
-    targetSeconds: 75,
+    targetSeconds: 120,
   },
   {
     day: 9,
@@ -181,7 +181,7 @@ export const CURRICULUM: DayContent[] = [
       "One day, the phone rang and the world tilted.",
     ],
     closureMessage: "What to carry forward: the \"one day\" of your story is where it begins. Don't rush past it. Render it like a scene from a film.",
-    targetSeconds: 75,
+    targetSeconds: 120,
   },
   {
     day: 10,
@@ -198,7 +198,7 @@ export const CURRICULUM: DayContent[] = [
       "Because of that, I called my mother for the first time in two years.",
     ],
     closureMessage: "What to carry forward: when you tell stories today, link each event to the one before it. \"Because of that\" is the most powerful phrase in storytelling.",
-    targetSeconds: 75,
+    targetSeconds: 120,
   },
   {
     day: 11,
@@ -215,7 +215,7 @@ export const CURRICULUM: DayContent[] = [
       "Until finally, the question I'd been dodging came out of someone else's mouth.",
     ],
     closureMessage: "What to carry forward: every story has a \"until finally\" — the moment the protagonist can't dodge anymore. In your stories, find it. In your life, recognize it.",
-    targetSeconds: 75,
+    targetSeconds: 120,
   },
   {
     day: 12,
@@ -232,7 +232,7 @@ export const CURRICULUM: DayContent[] = [
       "Once upon a time, I lived two lives without admitting it.",
     ],
     closureMessage: "What to carry forward: Pixar's spine is a tool. Use it. In emails. In pitches. In stories told over wine. You now have the most useful storytelling framework in the world in your bones. Week Two done. Tomorrow, Joseph Campbell.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
 
   // ── WEEK 3: HERO'S JOURNEY ───────────────────────────────────────────────
@@ -251,7 +251,7 @@ export const CURRICULUM: DayContent[] = [
       "It wasn't an opportunity. It was an invitation.",
     ],
     closureMessage: "What to carry forward: in your life and in your stories, learn to recognize the call. It rarely announces itself. But it's always specific.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 14,
@@ -268,7 +268,7 @@ export const CURRICULUM: DayContent[] = [
       "I was protecting myself. I just didn't know from what.",
     ],
     closureMessage: "What to carry forward: the refusal isn't weakness. It's the story being honest with itself. When you tell stories of change, don't skip the part where you almost didn't change.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 15,
@@ -285,7 +285,7 @@ export const CURRICULUM: DayContent[] = [
       "She handed me a single page and said: read this when you can't sleep.",
     ],
     closureMessage: "What to carry forward: when you tell mentor stories today, render them. One name. One scene. One specific gift. Generalities don't carry weight.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 16,
@@ -302,7 +302,7 @@ export const CURRICULUM: DayContent[] = [
       "The door closed behind me and I knew.",
     ],
     closureMessage: "What to carry forward: every life has thresholds. Most people don't notice when they're crossing one. Storytellers do. Storytellers find the threshold and name it.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 17,
@@ -319,7 +319,7 @@ export const CURRICULUM: DayContent[] = [
       "The lowest point wasn't a moment. It was a Tuesday afternoon.",
     ],
     closureMessage: "What to carry forward: the strongest stories don't avoid the bottom. They go through it. When you tell stories of struggle today, don't perform the suffering. Render it.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 18,
@@ -336,7 +336,7 @@ export const CURRICULUM: DayContent[] = [
       "Looking back, I can see every stage. At the time, I just felt lost.",
     ],
     closureMessage: "What to carry forward: your life has mythic shape. Most people never see it. Storytellers do. Week Three done. Tomorrow, Cicero — and the art of being heard.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
 
   // ── WEEK 4: CICERO ───────────────────────────────────────────────────────
@@ -355,7 +355,7 @@ export const CURRICULUM: DayContent[] = [
       "Here is what I learned, the hard way, in the only way it can be learned.",
     ],
     closureMessage: "What to carry forward: when you persuade today, don't argue. Testify. Stories beat sermons every time.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 20,
@@ -372,7 +372,7 @@ export const CURRICULUM: DayContent[] = [
       "There are fifty million people in Europe who have lost time because of one problem.",
     ],
     closureMessage: "What to carry forward: same content, different order, completely different impact. When you tell stories today, ask yourself: am I leading with the right thing?",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 21,
@@ -389,7 +389,7 @@ export const CURRICULUM: DayContent[] = [
       "Compound interest is the most magical thing in the world, and most people miss it.",
     ],
     closureMessage: "What to carry forward: jargon is laziness. Today, replace one piece of jargon with one image. Watch what happens.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 22,
@@ -406,7 +406,7 @@ export const CURRICULUM: DayContent[] = [
       "I sat down across from him and didn't tell him who I was.",
     ],
     closureMessage: "What to carry forward: people forget facts. They remember how they felt. Today, in one story, find the feeling. Build everything around it.",
-    targetSeconds: 60,
+    targetSeconds: 120,
   },
   {
     day: 23,
@@ -423,7 +423,7 @@ export const CURRICULUM: DayContent[] = [
       "I want to defend a position that I know is unpopular.",
     ],
     closureMessage: "What to carry forward: when you face resistance today, acknowledge it before answering it. Cicero won the Roman Senate this way. It still works.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
   {
     day: 24,
@@ -440,7 +440,7 @@ export const CURRICULUM: DayContent[] = [
       "There's a belief I've held for ten years, and I've only recently learned how to say it.",
     ],
     closureMessage: "What to carry forward: Cicero's four tools are yours. Use them every time you have something to say that matters. Week Four done. Tomorrow, no one teaches you. You synthesize.",
-    targetSeconds: 90,
+    targetSeconds: 120,
   },
 
   // ── WEEK 5: SYNTHESIS ────────────────────────────────────────────────────
@@ -477,7 +477,7 @@ export const CURRICULUM: DayContent[] = [
       "Most of who I am can be told in sixty seconds, if you tell it right.",
     ],
     closureMessage: "What to carry forward: the story you tell yourself about yourself is more important than the events of your life. Tell it carefully.",
-    targetSeconds: 60,
+    targetSeconds: 120,
     isSynthesisWeek: true,
   },
   {
@@ -495,7 +495,7 @@ export const CURRICULUM: DayContent[] = [
       "I want to tell you about a feeling I think most people have, but no one talks about.",
     ],
     closureMessage: "What to carry forward: specificity isn't the enemy of universality. It's the door to it. Tell your specific story, and the universal will appear on its own.",
-    targetSeconds: 90,
+    targetSeconds: 120,
     isSynthesisWeek: true,
   },
   {
@@ -513,7 +513,7 @@ export const CURRICULUM: DayContent[] = [
       "I used to think the same thing you think. Then this happened.",
     ],
     closureMessage: "What to carry forward: the strongest arguments aren't made. They're told. When you want to change someone's mind today, find the story — not the syllogism.",
-    targetSeconds: 90,
+    targetSeconds: 120,
     isSynthesisWeek: true,
   },
   {

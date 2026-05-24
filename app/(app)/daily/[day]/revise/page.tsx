@@ -10,10 +10,10 @@ export default async function RevisePage({
   searchParams,
 }: {
   params: Promise<{ day: string }>;
-  searchParams: Promise<{ recordingId?: string }>;
+  searchParams: Promise<{ recordingId?: string; tab?: string }>;
 }) {
   const { day: dayParam } = await params;
-  const { recordingId } = await searchParams;
+  const { recordingId, tab } = await searchParams;
   const dayNumber = parseInt(dayParam, 10);
   if (isNaN(dayNumber) || !recordingId) notFound();
 
@@ -32,7 +32,7 @@ export default async function RevisePage({
 
   const { data: fb } = await supabase
     .from('feedback')
-    .select('narrative, revision_prompt, structure_breakdown')
+    .select('narrative, revision_prompt, structure_breakdown, exemplar')
     .eq('recording_id', recordingId)
     .maybeSingle() as {
       data: {
@@ -42,28 +42,74 @@ export default async function RevisePage({
           framework: string;
           elements: Array<{ name: string; status: string; score: string; note: string; revision_tip?: string }>;
         } | null;
+        exemplar: string | null;
       } | null;
     };
 
   const revisionPrompt = fb?.revision_prompt ?? fb?.narrative ?? '';
   const breakdown = fb?.structure_breakdown;
+  const exemplar = fb?.exemplar ?? null;
+
+  const activeTab = tab === 'example' ? 'example' : 'revision';
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8 md:py-16 animate-fade-in">
       <p className="font-mono text-xs uppercase tracking-wider text-accent-warm mb-8">
-        Your micro-revision for Recording 2
+        Before recording 2
       </p>
 
-      <div className="font-serif text-xl text-fg-primary leading-relaxed whitespace-pre-line mb-12">
-        {revisionPrompt}
+      {/* Tabs */}
+      <div className="flex gap-1 mb-10 border-b border-border-subtle">
+        <Link
+          href={`/daily/${dayNumber}/revise?recordingId=${recordingId}&tab=revision`}
+          className={`font-sans text-sm pb-3 px-1 border-b-2 transition-colors duration-200 ${
+            activeTab === 'revision'
+              ? 'border-accent-warm text-fg-primary'
+              : 'border-transparent text-fg-muted hover:text-fg-primary'
+          }`}
+        >
+          Micro-revision
+        </Link>
+        {exemplar && (
+          <Link
+            href={`/daily/${dayNumber}/revise?recordingId=${recordingId}&tab=example`}
+            className={`font-sans text-sm pb-3 px-1 border-b-2 ml-4 transition-colors duration-200 ${
+              activeTab === 'example'
+                ? 'border-accent-warm text-fg-primary'
+                : 'border-transparent text-fg-muted hover:text-fg-primary'
+            }`}
+          >
+            How it could be told
+          </Link>
+        )}
       </div>
 
-      {breakdown && (
-        <div className="mb-12 border-t border-border-subtle pt-10">
-          <StructureBreakdown
-            framework={breakdown.framework}
-            elements={breakdown.elements}
-          />
+      {activeTab === 'revision' ? (
+        <>
+          <div className="font-serif text-xl text-fg-primary leading-relaxed whitespace-pre-line mb-12">
+            {revisionPrompt}
+          </div>
+
+          {breakdown && (
+            <div className="mb-12 border-t border-border-subtle pt-10">
+              <StructureBreakdown
+                framework={breakdown.framework}
+                elements={breakdown.elements}
+              />
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="mb-12">
+          <p className="font-mono text-xs uppercase tracking-wider text-fg-subtle mb-6">
+            Your story — told through the framework
+          </p>
+          <div className="font-serif text-xl text-fg-primary leading-relaxed whitespace-pre-line">
+            {exemplar}
+          </div>
+          <p className="font-sans text-xs text-fg-subtle mt-8 leading-relaxed">
+            This is your story, retold through the framework. Use it as a reference — not a script. Your second recording should still be yours.
+          </p>
         </div>
       )}
 
