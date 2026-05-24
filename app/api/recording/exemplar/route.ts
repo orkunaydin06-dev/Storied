@@ -37,7 +37,8 @@ export async function POST(req: Request) {
   const day = getDayContent(recording.day_number);
   if (!day) return Response.json({ error: 'Day not found' }, { status: 404 });
 
-  const firstName = (recording.users as { first_name: string | null } | null)?.first_name ?? 'the storyteller';
+  const usersData = recording.users as unknown as { first_name: string | null } | null;
+  const firstName = usersData?.first_name ?? 'the storyteller';
 
   const prompt = `You are writing an exemplar version of a story told by ${firstName}.
 
