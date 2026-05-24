@@ -27,8 +27,16 @@ function WelcomeContent() {
       const refreshToken = params.get('refresh_token');
       if (accessToken && refreshToken) {
         supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
-          .then(({ data: { session } }) => {
-            if (session) router.push('/begin');
+          .then(async ({ data: { session } }) => {
+            if (session) {
+              // Grant beta access then redirect
+              await fetch('/api/beta-access', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: 'STORIED_BETA' }),
+              }).catch(() => {});
+              router.push('/begin');
+            }
           });
         return;
       }
@@ -77,7 +85,7 @@ function WelcomeContent() {
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback${sessionId ? `?session_id=${sessionId}` : ''}`,
+        emailRedirectTo: `${window.location.origin}/welcome`,
       },
     });
 
