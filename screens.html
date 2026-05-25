@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Storied — All Screens</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--bg:#0B1929;--bg2:#142536;--bg3:#1C3148;--fg:#F5F1EB;--mu:#A8B0BC;--su:#6B7484;--am:#E8B547;--ok:#6BA888;--wa:#C9885E;--er:#C95E5E;--b1:#1F3349;--b2:#2A4259;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060f1a;font-family:Inter,sans-serif;color:var(--fg);padding:40px;}
+h1{font-family:Lora,serif;font-size:28px;margin-bottom:8px;}
+.sub{color:var(--mu);font-size:14px;margin-bottom:48px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,390px);gap:48px;}
+.sw{display:flex;flex-direction:column;gap:10px;}
+.sl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--su);letter-spacing:.06em;text-transform:uppercase;}
+.ph{width:390px;background:var(--bg);border-radius:16px;overflow:hidden;border:1px solid var(--b2);}
+.serif{font-family:Lora,serif;} .mono{font-family:'JetBrains Mono',monospace;} .sans{font-family:Inter,sans-serif;}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--bg);}
+.logo{font-family:Lora,serif;font-size:16px;color:var(--mu);}
+.nr{font-size:13px;color:var(--mu);}
+.px{padding-left:24px;padding-right:24px;}
+.ct{text-align:center;}
+.am{color:var(--am);} .mu{color:var(--mu);} .su{color:var(--su);}
+.h1{font-family:Lora,serif;font-size:36px;line-height:1.12;}
+.h2{font-family:Lora,serif;font-size:26px;line-height:1.2;}
+.h3{font-family:Lora,serif;font-size:20px;line-height:1.25;}
+.p{font-size:14px;line-height:1.6;color:var(--mu);}
+.p15{font-size:15px;line-height:1.65;font-family:Lora,serif;}
+.p17{font-size:17px;line-height:1.7;font-family:Lora,serif;}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--su);}
+.lba{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--am);}
+.div{height:1px;background:var(--b1);margin:0 24px;}
+.btn{display:block;background:var(--am);color:var(--bg);text-align:center;font-family:Inter,sans-serif;font-weight:500;font-size:15px;padding:15px 24px;border-radius:12px;margin:0 24px;border:none;cursor:pointer;}
+.btn2{background:transparent;color:var(--fg);border:1px solid var(--b2);}
+.card{background:var(--bg2);border:1px solid var(--b1);border-radius:14px;margin:0 16px;padding:18px;}
+.wf{display:flex;align-items:flex-end;gap:2px;height:28px;}
+.wf div{width:4px;border-radius:2px;background:var(--b2);opacity:.6;}
+.wf.am div{background:var(--am);opacity:.75;}
+.sr{display:flex;align-items:center;gap:10px;padding:0 24px;margin-bottom:14px;}
+.sl2{font-size:13px;color:var(--mu);min-width:90px;}
+.sb{flex:1;height:5px;background:var(--b2);border-radius:3px;overflow:hidden;}
+.sf{height:100%;background:var(--am);border-radius:3px;}
+.sv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--fg);min-width:24px;text-align:right;}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;}
+.seg{border-radius:8px;padding:10px 14px 12px;margin-bottom:8px;border-left:3px solid;}
+.seg .sl3{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;margin-bottom:6px;text-transform:uppercase;}
+.seg .st{font-family:Lora,serif;font-size:14px;line-height:1.6;color:var(--fg);}
+.ring{width:140px;height:140px;border-radius:50%;border:2px solid var(--b2);display:flex;align-items:center;justify-content:center;margin:0 auto;}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--am);}
+</style>
+</head>
+<body>
+<h1>Storied — All Screens</h1>
+<p class="sub">19 screens · full flow · open in browser</p>
+<div class="grid">
+
+<!-- 01 LANDING -->
+<div class="sw"><div class="sl">01 — Landing Page</div>
+<div class="ph">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Sign in</span></div>
+  <div style="background:linear-gradient(180deg,rgba(100,160,220,.07) 0%,transparent 60%);padding:32px 0 0">
+    <div class="px ct" style="margin-bottom:8px"><span class="lbl">Founding storytellers — $29</span></div>
+    <div class="px ct"><div class="h1 am" style="margin-bottom:16px">The daily practice<br>of being a storyteller.</div>
+    <div class="p" style="margin-bottom:28px">Ten minutes a day. Thirty practices.<br>The methods you know, finally practiced.</div></div>
+    <div style="margin-bottom:12px"><button class="btn">Begin your practice — $29</button></div>
+    <div class="px ct" style="margin-bottom:20px"><span class="lbl">One-time payment. No subscription.</span></div>
+    <div class="px" style="margin-bottom:28px"><div class="wf am" id="wf0"></div></div>
+  </div>
+  <div class="div"></div>
+  <div class="px" style="padding-top:24px;padding-bottom:24px">
+    <div class="serif" style="font-size:19px;margin-bottom:18px">What you build over 30 days</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div><div class="serif am" style="font-size:13px;font-weight:600;margin-bottom:6px">The method</div><div class="p" style="font-size:11px">Five frameworks. Aristotle. Pixar. Campbell. Cicero. Synthesis.</div></div>
+      <div><div class="serif am" style="font-size:13px;font-weight:600;margin-bottom:6px">The practice</div><div class="p" style="font-size:11px">Record. Hear feedback. Revise. Record again.</div></div>
+      <div><div class="serif am" style="font-size:13px;font-weight:600;margin-bottom:6px">The instinct</div><div class="p" style="font-size:11px">After 30 days you just tell stories that land.</div></div>
+    </div>
+  </div>
+  <div class="div"></div>
+  <div class="px" style="padding-top:24px;padding-bottom:4px">
+    <div class="lbl" style="margin-bottom:8px">The Curriculum</div>
+    <div class="h3" style="margin-bottom:18px">Five weeks.<br>Five frameworks.</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+      <div class="card" style="padding:12px 16px"><span class="lba">Week 1</span><div style="font-family:Lora,serif;font-size:14px;font-weight:600;margin-top:4px;color:var(--fg)">Aristotle's Poetics — Structure &amp; Conflict</div></div>
+      <div class="card" style="padding:12px 16px"><span class="lba">Week 2</span><div style="font-family:Lora,serif;font-size:14px;font-weight:600;margin-top:4px;color:var(--fg)">Pixar's Story Spine — The Modern Skeleton</div></div>
+      <div class="card" style="padding:12px 16px"><span class="lba">Week 3</span><div style="font-family:Lora,serif;font-size:14px;font-weight:600;margin-top:4px;color:var(--fg)">Hero's Journey — Personal Transformation</div></div>
+      <div class="card" style="padding:12px 16px"><span class="lba">Week 4</span><div style="font-family:Lora,serif;font-size:14px;font-weight:600;margin-top:4px;color:var(--fg)">Cicero's Rhetoric — Persuasion &amp; Stake</div></div>
+      <div class="card" style="padding:12px 16px"><span class="lba">Week 5</span><div style="font-family:Lora,serif;font-size:14px;font-weight:600;margin-top:4px;color:var(--fg)">Synthesis — Finding Your Voice</div></div>
+    </div>
+  </div>
+  <div class="div"></div>
+  <div class="px" style="padding-top:20px;padding-bottom:20px">
+    <div class="h3" style="margin-bottom:14px">Questions</div>
+    <div style="border-top:1px solid var(--b1);padding:12px 0"><div style="font-size:13px;font-weight:600;color:var(--fg);margin-bottom:4px">How long per practice?</div><div class="p" style="font-size:12px">Eight to twelve minutes. Record. Feedback. Revise. Done.</div></div>
+    <div style="border-top:1px solid var(--b1);padding:12px 0"><div style="font-size:13px;font-weight:600;color:var(--fg);margin-bottom:4px">What if I miss a day?</div><div class="p" style="font-size:12px">The practice waits. No streak pressure. Come back when ready.</div></div>
+    <div style="border-top:1px solid var(--b1);padding:12px 0"><div style="font-size:13px;font-weight:600;color:var(--fg);margin-bottom:4px">Is this AI feedback?</div><div class="p" style="font-size:12px">Yes. Claude applies the day's framework and gives specific analysis.</div></div>
+  </div>
+  <div class="div"></div>
+  <div class="px" style="padding-top:20px;padding-bottom:24px">
+    <div class="lba" style="margin-bottom:12px">Founding storytellers</div>
+    <div class="card" style="margin:0;padding:20px">
+      <div class="h3" style="margin-bottom:8px">$29 — for the first 50 customers.</div>
+      <div class="p" style="font-size:12px;margin-bottom:16px">After that, $39. After 200 customers, $49.</div>
+      <button class="btn" style="margin:0;border-radius:10px">Begin your practice — $29</button>
+    </div>
+  </div>
+  <div class="div"></div>
+  <div class="px" style="padding:20px 24px">
+    <div class="serif mu" style="font-size:14px;margin-bottom:4px">Storied — Built in Dublin</div>
+    <div class="p" style="font-size:12px">hello@storied.app</div>
+    <div class="p" style="font-size:11px;margin-top:8px">Methodology · Privacy · Refund · Contact</div>
+  </div>
+</div></div>
+
+<!-- 02 WELCOME -->
+<div class="sw"><div class="sl">02 — Welcome / Sign In</div>
+<div class="ph" style="min-height:844px;display:flex;align-items:center">
+  <div style="width:100%;padding:40px 0">
+    <div class="px ct" style="margin-bottom:40px"><div class="h1" style="margin-bottom:12px">Welcome.</div><div class="p">Your practice begins now.</div></div>
+    <div class="px" style="margin-bottom:12px"><button class="btn btn2" style="width:100%;display:block">Continue with Google</button></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:0 24px;margin-bottom:12px"><div style="flex:1;height:1px;background:var(--b1)"></div><span class="lbl">or</span><div style="flex:1;height:1px;background:var(--b1)"></div></div>
+    <div class="px" style="margin-bottom:12px">
+      <div style="border:1px solid var(--b2);border-radius:10px;padding:13px 16px;margin-bottom:10px"><span class="su" style="font-size:14px">your@email.com</span></div>
+      <button class="btn btn2" style="width:100%;display:block">Send magic link</button>
+    </div>
+    <div class="px ct" style="margin-top:16px"><span class="lbl">We just need to set up your account. One step.</span></div>
+  </div>
+</div></div>
+
+<!-- 03 MAGIC LINK SENT -->
+<div class="sw"><div class="sl">03 — Magic Link Sent</div>
+<div class="ph" style="min-height:844px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+  <div class="px ct" style="width:100%;padding:40px 24px">
+    <div class="h1" style="margin-bottom:12px">Welcome.</div>
+    <div class="p" style="margin-bottom:32px">Your practice begins now.</div>
+    <div class="div" style="margin:0 0 32px"></div>
+    <div class="h3" style="margin-bottom:12px">Check your inbox.</div>
+    <div class="p">A sign-in link is on its way to<br><strong style="color:var(--fg)">orkun@example.com</strong>.<br>It expires in 15 minutes.</div>
+  </div>
+</div></div>
+
+<!-- 04 BEGIN -->
+<div class="sw"><div class="sl">04 — Begin — Day 1 Onboarding</div>
+<div class="ph" style="min-height:844px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+  <div class="px ct" style="width:100%;padding:0 24px">
+    <div class="h2" style="margin-bottom:28px">Orkun, you've read the books.<br>Now you do the work.</div>
+    <div class="lbl" style="margin-bottom:6px">Day 1 of 30</div>
+    <div class="p" style="margin-bottom:28px">Week 1: Aristotle's Structure and Conflict</div>
+    <div class="p" style="margin-bottom:36px">Ten minutes. Begin when ready.</div>
+    <button class="btn" style="width:100%;margin:0 0 16px">Begin Day 1</button>
+    <div class="su" style="font-size:13px">What to expect</div>
+  </div>
+</div></div>
+
+<!-- 05 DASHBOARD READY -->
+<div class="sw"><div class="sl">05 — Dashboard — Practice Ready</div>
+<div class="ph" style="min-height:844px">
+  <div class="nav"><span class="logo">Storied</span></div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:700px;padding:0 24px">
+    <div class="p ct" style="margin-bottom:6px">Good evening, Orkun</div>
+    <div class="lbl ct" style="margin-bottom:4px">Day 3 of 30</div>
+    <div class="p" style="margin-bottom:28px;text-align:center">Week 1: Structure &amp; Conflict</div>
+    <div class="div" style="margin:0 0 28px;width:100%"></div>
+    <div class="h2 ct" style="margin-bottom:32px">Today's practice<br>is ready.</div>
+    <button class="btn" style="width:100%;margin:0 0 60px">Begin Day 3</button>
+    <div class="div" style="margin:0 0 16px;width:100%"></div>
+    <div class="lbl ct">Streak: 3 days</div>
+  </div>
+</div></div>
+
+<!-- 06 DASHBOARD COMPLETE -->
+<div class="sw"><div class="sl">06 — Dashboard — Day Complete</div>
+<div class="ph" style="min-height:844px">
+  <div class="nav"><span class="logo">Storied</span></div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:700px;padding:0 24px">
+    <div class="p ct" style="margin-bottom:6px">Good evening, Orkun</div>
+    <div class="lbl ct" style="margin-bottom:4px">Day 4 of 30</div>
+    <div class="lbl su ct" style="margin-bottom:24px">Day 3 complete</div>
+    <div class="div" style="margin:0 0 24px;width:100%"></div>
+    <div class="h2 ct" style="margin-bottom:32px">Day 4 is ready.</div>
+    <button class="btn" style="width:100%;margin:0 0 60px">Begin Day 4</button>
+    <div class="div" style="margin:0 0 16px;width:100%"></div>
+    <div class="lbl ct">Streak: 3 days</div>
+  </div>
+</div></div>
+
+<!-- 07 QUESTION -->
+<div class="sw"><div class="sl">07 — Daily — Question</div>
+<div class="ph" style="min-height:844px">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div class="px" style="padding-top:20px;padding-bottom:32px">
+    <div class="lbl" style="margin-bottom:6px">Day 1 · Week 1</div>
+    <div class="h3" style="margin-bottom:20px">Ordinary day,<br>unforgettable turn.</div>
+    <div class="div" style="margin:0 0 20px"></div>
+    <div class="lba" style="margin-bottom:12px">Today's Question</div>
+    <div class="p17" style="color:var(--fg);margin-bottom:40px">Tell me about the most ordinary day in your life that turned into something unforgettable. Two minutes — beginning, middle, end.</div>
+    <button class="btn" style="margin-bottom:12px;width:calc(100% - 48px)">Read the method</button>
+    <div class="p ct" style="font-size:13px;margin-top:12px">Skip to recording</div>
+  </div>
+</div></div>
+
+<!-- 08 TEACHING -->
+<div class="sw"><div class="sl">08 — Daily — Teaching / Method</div>
+<div class="ph" style="min-height:844px">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div class="px" style="padding-top:20px;padding-bottom:32px">
+    <div class="lbl" style="margin-bottom:16px">Aristotle's Poetics</div>
+    <blockquote class="p17" style="color:var(--fg);margin-bottom:48px">Aristotle said it 2,300 years ago: "Every story is made of three parts — a beginning, a middle, and an end."<br><br>It sounds simple. But most people start in the middle, blur through the action, and skip the end.<br><br>Today: count all three.</blockquote>
+    <button class="btn" style="width:calc(100% - 48px)">▶&nbsp;&nbsp;Start recording</button>
+  </div>
+</div></div>
+
+<!-- 09 RECORD 1 -->
+<div class="sw"><div class="sl">09 — Recording 1 — In Progress</div>
+<div class="ph" style="min-height:844px">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div style="display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:28px">
+    <div class="mono" style="font-size:72px;line-height:1">1:24</div>
+    <div class="ring"><div class="dot"></div></div>
+    <div class="wf am px" id="wf9" style="width:100%;height:32px"></div>
+    <button class="btn btn2" style="width:120px;margin:0">Stop</button>
+  </div>
+</div></div>
+
+<!-- 10 PROCESSING -->
+<div class="sw"><div class="sl">10 — Processing — Reading Story</div>
+<div class="ph" style="min-height:844px;display:flex;flex-direction:column">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px">
+    <div class="h3 ct">Reading your story</div>
+    <div class="p ct">Applying Aristotle's framework.</div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--am);opacity:.35"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--am);opacity:.65"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--am);opacity:1"></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- 11 FEEDBACK -->
+<div class="sw"><div class="sl">11 — Feedback — Day 1</div>
+<div class="ph">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div style="padding:16px 0 32px">
+    <div class="lbl px" style="margin-bottom:10px">Your first recording</div>
+    <div class="px" style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="width:36px;height:36px;border-radius:50%;border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:13px;flex-shrink:0">▶</div>
+      <div class="wf" id="wf11" style="flex:1;height:28px"></div>
+    </div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lba px" style="margin-bottom:16px">Your Day 1 Baseline</div>
+    <div class="sr"><span class="sl2">Clarity</span><div class="sb"><div class="sf" style="width:58%"></div></div><span class="sv">58</span></div>
+    <div class="sr"><span class="sl2">Structure</span><div class="sb"><div class="sf" style="width:45%"></div></div><span class="sv">45</span></div>
+    <div class="sr"><span class="sl2">Delivery</span><div class="sb"><div class="sf" style="width:50%"></div></div><span class="sv">50</span></div>
+    <div class="sr"><span class="sl2">Depth</span><div class="sb"><div class="sf" style="width:38%"></div></div><span class="sv">38</span></div>
+    <div class="sr"><span class="sl2">Impact</span><div class="sb"><div class="sf" style="width:35%"></div></div><span class="sv">35</span></div>
+    <div class="sr"><span class="sl2">Authenticity</span><div class="sb"><div class="sf" style="width:42%"></div></div><span class="sv">42</span></div>
+    <div class="div" style="margin:8px 0 12px"></div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 24px;margin-bottom:20px">
+      <span class="p" style="font-size:15px">Overall</span>
+      <span class="mono am" style="font-size:38px">45<span class="su" style="font-size:18px">/100</span></span>
+    </div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:12px">Feedback</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:20px">Orkun, the bones of this story are here — a setting, a moment, something that mattered. But right now it reads as a summary.<br><br>You told me what happened. The story happens when you show me the exact moment things shifted. I can't see the table, hear the conversation, feel the weight.<br><br>Record again. Open on the sensory detail. Begin inside the moment.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lba px" style="margin-bottom:12px">Your Micro-Revision</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:28px">Start with the exact sensory detail — not what happened, but where you were.<br><br>Try something like:<br><br>• The coffee was still hot when I sat down.<br>• It was 9:47 on a Monday.<br>• I remember the rain.</div>
+    <button class="btn">See full analysis + record again</button>
+  </div>
+</div></div>
+
+<!-- 12 REVISE TAB 1 -->
+<div class="sw"><div class="sl">12 — Revise — Micro-revision Tab</div>
+<div class="ph">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div style="padding-top:14px">
+    <div class="lba px" style="margin-bottom:14px">Before Recording 2</div>
+    <div style="display:flex;border-bottom:1px solid var(--b1);margin-bottom:20px">
+      <div style="padding:8px 16px 10px 24px;font-size:14px;font-weight:500;color:var(--fg);border-bottom:2px solid var(--am);margin-bottom:-1px">Micro-revision</div>
+      <div style="padding:8px 16px 10px;font-size:14px;color:var(--mu)">How it could be told</div>
+    </div>
+    <div class="p17 px" style="color:var(--fg);margin-bottom:28px">Start with the exact sensory detail. Not what happened — where you were, what you could see.<br><br>Try something like:<br><br>• The coffee was still hot when I sat down.<br>• It was 9:47 on a Monday.<br>• I remember the rain.<br><br>Open on that one detail. The story follows.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:14px">Aristotle's Structure Breakdown</div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding:0 16px;margin-bottom:24px">
+      <div class="card" style="padding:12px 16px">
+        <div style="font-weight:500;font-size:13px;margin-bottom:6px">Beginning</div>
+        <div class="tag" style="color:var(--ok);background:rgba(107,168,136,.15);margin-bottom:6px">present</div>
+        <div class="p" style="font-size:12px">Present but thin — opened with setting summary, not a concrete scene.</div>
+      </div>
+      <div class="card" style="padding:12px 16px">
+        <div style="font-weight:500;font-size:13px;margin-bottom:6px">Inciting Incident</div>
+        <div class="tag" style="color:var(--wa);background:rgba(200,136,94,.15);margin-bottom:6px">weak</div>
+        <div class="p" style="font-size:12px">The turn was named but not shown. We need the exact moment.</div>
+      </div>
+      <div class="card" style="padding:12px 16px">
+        <div style="font-weight:500;font-size:13px;margin-bottom:6px">Conflict</div>
+        <div class="tag" style="color:var(--su);background:rgba(107,116,132,.15);margin-bottom:6px">missing</div>
+        <div class="p" style="font-size:12px">Internal vs. external tension was absent. What were the two forces?</div>
+      </div>
+      <div class="card" style="padding:12px 16px">
+        <div style="font-weight:500;font-size:13px;margin-bottom:6px">Recognition</div>
+        <div class="tag" style="color:var(--su);background:rgba(107,116,132,.15);margin-bottom:6px">missing</div>
+        <div class="p" style="font-size:12px">The realisation wasn't articulated. When did you see it?</div>
+      </div>
+    </div>
+    <button class="btn" style="margin-bottom:24px">Record again</button>
+  </div>
+</div></div>
+
+<!-- 13 REVISE TAB 2 -->
+<div class="sw"><div class="sl">13 — Revise — How It Could Be Told</div>
+<div class="ph">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div style="padding-top:14px">
+    <div class="lba px" style="margin-bottom:14px">Before Recording 2</div>
+    <div style="display:flex;border-bottom:1px solid var(--b1);margin-bottom:16px">
+      <div style="padding:8px 16px 10px 24px;font-size:14px;color:var(--mu)">Micro-revision</div>
+      <div style="padding:8px 16px 10px;font-size:14px;font-weight:500;color:var(--fg);border-bottom:2px solid var(--am);margin-bottom:-1px">How it could be told</div>
+    </div>
+    <div class="px" style="margin-bottom:14px">
+      <div class="lbl" style="margin-bottom:6px">Aristotle's Poetics</div>
+      <div class="p" style="font-size:12px;margin-bottom:14px">Tap an element to highlight it in the story.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+        <div class="tag" style="color:#E8B547;background:#E8B54726;border:1px solid #E8B54740">Beginning</div>
+        <div class="tag" style="color:#64A0DC;background:#64A0DC26;border:1px solid #64A0DC40">Inciting Incident</div>
+        <div class="tag" style="color:#7BC67B;background:#7BC67B26;border:1px solid #7BC67B40">Conflict</div>
+        <div class="tag" style="color:#B57BDC;background:#B57BDC26;border:1px solid #B57BDC40">Recognition</div>
+        <div class="tag" style="color:#DC8B5A;background:#DC8B5A26;border:1px solid #DC8B5A40">Reversal</div>
+        <div class="tag" style="color:#5AD2D2;background:#5AD2D226;border:1px solid #5AD2D240">Emotional Release</div>
+      </div>
+    </div>
+    <div class="div" style="margin-bottom:16px"></div>
+    <div class="px" style="padding-bottom:20px">
+      <div class="seg" style="background:#E8B54715;border-left-color:#E8B547"><div class="sl3" style="color:#E8B547">Beginning</div><div class="st">It was a Tuesday. I know because Tuesdays were always the same — coffee at 7:15, the same train, the same headphones, the same playlist.</div></div>
+      <div class="seg" style="background:#64A0DC15;border-left-color:#64A0DC"><div class="sl3" style="color:#64A0DC">Inciting Incident</div><div class="st">The message arrived at 9:47, while I was in a meeting about Q3 projections. One line. My father's number.</div></div>
+      <div class="seg" style="background:#7BC67B15;border-left-color:#7BC67B"><div class="sl3" style="color:#7BC67B">Conflict</div><div class="st">Two parts of me collided: the professional who couldn't leave, and the son who knew this call didn't happen on ordinary days.</div></div>
+      <div class="seg" style="background:#B57BDC15;border-left-color:#B57BDC"><div class="sl3" style="color:#B57BDC">Recognition</div><div class="st">I stepped out. The corridor was empty. I realised I had been treating every Tuesday like it was guaranteed.</div></div>
+      <div class="seg" style="background:#DC8B5A15;border-left-color:#DC8B5A"><div class="sl3" style="color:#DC8B5A">Reversal</div><div class="st">Everything about that morning — the coffee, the train — had been pointing at something I refused to see.</div></div>
+      <div class="seg" style="background:#5AD2D215;border-left-color:#5AD2D2"><div class="sl3" style="color:#5AD2D2">Emotional Release</div><div class="st">He was fine. A small scare. But I haven't listened to that playlist since.</div></div>
+      <div class="div" style="margin:12px 0 10px"></div>
+      <div class="p" style="font-size:12px;margin-bottom:20px">Your story, retold through the framework. Use it as a reference — not a script.</div>
+      <button class="btn" style="margin:0;width:100%">Record again</button>
+    </div>
+  </div>
+</div></div>
+
+<!-- 14 RECORD 2 -->
+<div class="sw"><div class="sl">14 — Recording 2 — Revised</div>
+<div class="ph" style="min-height:844px">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div class="lbl px" style="margin-top:16px;text-align:center">Same question. Revised.</div>
+  <div style="display:flex;flex-direction:column;align-items:center;padding-top:14px;gap:24px">
+    <div class="mono" style="font-size:72px;line-height:1">0:52</div>
+    <div class="ring" style="border-color:var(--am)"><div class="dot"></div></div>
+    <div class="wf am" id="wf14" style="width:calc(100% - 48px);height:32px"></div>
+    <button class="btn btn2" style="width:120px;margin:0">Stop</button>
+  </div>
+</div></div>
+
+<!-- 15 COMPARE -->
+<div class="sw"><div class="sl">15 — Compare — R1 vs R2</div>
+<div class="ph">
+  <div class="nav"><span class="logo">Storied</span><span class="nr">Exit practice</span></div>
+  <div style="padding:16px 0 32px">
+    <div class="lba px" style="margin-bottom:16px">Recording 1 vs Recording 2</div>
+    <div class="lbl px" style="margin-bottom:8px">R1 — 2m 04s</div>
+    <div class="px" style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <div style="width:34px;height:34px;border-radius:50%;border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--mu);flex-shrink:0">▶</div>
+      <div class="wf" id="wf15a" style="flex:1;height:26px"></div>
+    </div>
+    <div class="lba px" style="margin-bottom:8px">R2 — 2m 18s</div>
+    <div class="px" style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <div style="width:34px;height:34px;border-radius:50%;border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--am);flex-shrink:0">▶</div>
+      <div class="wf am" id="wf15b" style="flex:1;height:26px"></div>
+    </div>
+    <div class="div" style="margin-bottom:16px"></div>
+    <div style="padding:0 24px;margin-bottom:6px;display:grid;grid-template-columns:1fr 36px 36px 32px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--su)">
+      <span></span><span style="text-align:right">R1</span><span style="text-align:right">R2</span><span style="text-align:right">Δ</span>
+    </div>
+    <div style="padding:4px 24px;display:grid;grid-template-columns:1fr 36px 36px 32px;font-size:13px;margin-bottom:4px"><span class="mu">Clarity</span><span style="text-align:right;color:var(--su);font-family:'JetBrains Mono',monospace">58</span><span style="text-align:right;font-family:'JetBrains Mono',monospace">68</span><span style="text-align:right;color:var(--ok);font-family:'JetBrains Mono',monospace">+10</span></div>
+    <div style="padding:4px 24px;display:grid;grid-template-columns:1fr 36px 36px 32px;font-size:13px;margin-bottom:4px"><span class="mu">Structure</span><span style="text-align:right;color:var(--su);font-family:'JetBrains Mono',monospace">45</span><span style="text-align:right;font-family:'JetBrains Mono',monospace">62</span><span style="text-align:right;color:var(--ok);font-family:'JetBrains Mono',monospace">+17</span></div>
+    <div style="padding:4px 24px;display:grid;grid-template-columns:1fr 36px 36px 32px;font-size:13px;margin-bottom:4px"><span class="mu">Delivery</span><span style="text-align:right;color:var(--su);font-family:'JetBrains Mono',monospace">50</span><span style="text-align:right;font-family:'JetBrains Mono',monospace">58</span><span style="text-align:right;color:var(--ok);font-family:'JetBrains Mono',monospace">+8</span></div>
+    <div style="padding:4px 24px;display:grid;grid-template-columns:1fr 36px 36px 32px;font-size:13px;margin-bottom:4px"><span class="mu">Depth</span><span style="text-align:right;color:var(--su);font-family:'JetBrains Mono',monospace">38</span><span style="text-align:right;font-family:'JetBrains Mono',monospace">50</span><span style="text-align:right;color:var(--ok);font-family:'JetBrains Mono',monospace">+12</span></div>
+    <div style="padding:4px 24px;display:grid;grid-template-columns:1fr 36px 36px 32px;font-size:13px;margin-bottom:4px"><span class="mu">Impact</span><span style="text-align:right;color:var(--su);font-family:'JetBrains Mono',monospace">35</span><span style="text-align:right;font-family:'JetBrains Mono',monospace">52</span><span style="text-align:right;color:var(--ok);font-family:'JetBrains Mono',monospace">+17</span></div>
+    <div style="padding:4px 24px;display:grid;grid-template-columns:1fr 36px 36px 32px;font-size:13px;margin-bottom:4px"><span class="mu">Authenticity</span><span style="text-align:right;color:var(--su);font-family:'JetBrains Mono',monospace">42</span><span style="text-align:right;font-family:'JetBrains Mono',monospace">55</span><span style="text-align:right;color:var(--ok);font-family:'JetBrains Mono',monospace">+13</span></div>
+    <div class="div" style="margin:16px 0"></div>
+    <div class="lbl px ct" style="margin-bottom:8px">Overall</div>
+    <div class="mono ct" style="font-size:38px;margin-bottom:4px">45 → 57</div>
+    <div style="text-align:center;color:var(--ok);font-family:'JetBrains Mono',monospace;font-size:20px;margin-bottom:20px">▲ 12</div>
+    <div class="div" style="margin-bottom:16px"></div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:20px">The second recording found the scene. You opened inside the moment — the table, the time, the message — and the story held its shape. That's Aristotle working.</div>
+    <div class="div" style="margin-bottom:16px"></div>
+    <div class="lbl px" style="margin-bottom:8px">What to carry forward</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:20px">When you tell stories today — start with one concrete detail. Not a summary. A sensation.</div>
+    <div class="div" style="margin-bottom:16px"></div>
+    <div class="lbl px" style="margin-bottom:6px">Tomorrow</div>
+    <div class="p px" style="font-size:13px;margin-bottom:24px">Day 2 — A disagreement you held your ground in.</div>
+    <button class="btn">Finish Day 1</button>
+  </div>
+</div></div>
+
+<!-- 16 CLOSURE -->
+<div class="sw"><div class="sl">16 — Closure — Day Summary</div>
+<div class="ph">
+  <div class="nav"><span class="logo">Storied</span></div>
+  <div style="padding:20px 0 32px">
+    <div class="lbl px ct" style="margin-bottom:14px">Day 1 Complete</div>
+    <div class="h2 px ct" style="margin-bottom:10px">You moved 12 points<br>in 4 minutes.</div>
+    <div class="p px ct" style="margin-bottom:24px">That is the kind of movement that compounds.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:10px">What changed</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:24px">The second recording found the scene. You opened inside the moment and the story held its shape.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:10px">What to carry forward</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:24px">When you tell stories today — start with one concrete detail. Not a summary. A sensation.</div>
+    <div class="div" style="margin-bottom:16px"></div>
+    <div style="padding:0 24px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span class="mu">Streak</span><span class="mono">1 day</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span class="mu">Tomorrow</span><span class="su" style="text-align:right;max-width:220px">Day 2 — A disagreement you held your ground in.</span></div>
+    </div>
+    <button class="btn">Save Day 1</button>
+  </div>
+</div></div>
+
+<!-- 17 ARCHIVE -->
+<div class="sw"><div class="sl">17 — Archive — Your Recordings</div>
+<div class="ph" style="min-height:760px">
+  <div class="nav"><span class="logo">Storied</span></div>
+  <div style="padding:16px 0 32px">
+    <div class="h3 px" style="margin-bottom:6px">Your recordings</div>
+    <div class="p px" style="font-size:12px;margin-bottom:20px">Private. Yours. Always.</div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding:0 16px;margin-bottom:24px">
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px"><div><div class="lbl" style="margin-bottom:4px">Day 1</div><div class="mono" style="font-size:14px;color:var(--mu)">R1: 45 → R2: 57</div></div><span style="color:var(--am);font-size:13px">View feedback</span></div>
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px"><div><div class="lbl" style="margin-bottom:4px">Day 2</div><div class="mono" style="font-size:14px;color:var(--mu)">R1: 52 → R2: 65</div></div><span style="color:var(--am);font-size:13px">View feedback</span></div>
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px"><div><div class="lbl" style="margin-bottom:4px">Day 3</div><div class="mono" style="font-size:14px;color:var(--mu)">R1: 61 → R2: 74</div></div><span style="color:var(--am);font-size:13px">View feedback</span></div>
+    </div>
+    <div class="div" style="margin-bottom:16px"></div>
+    <div class="px" style="display:flex;flex-direction:column;gap:12px">
+      <span class="mu" style="font-size:13px">Export all recordings (ZIP)</span>
+      <span style="color:var(--er);font-size:13px">Delete everything</span>
+    </div>
+  </div>
+</div></div>
+
+<!-- 18 SETTINGS -->
+<div class="sw"><div class="sl">18 — Settings</div>
+<div class="ph" style="min-height:680px">
+  <div class="nav"><span class="logo">Storied</span></div>
+  <div style="padding:16px 0 32px">
+    <div class="h3 px" style="margin-bottom:20px">Settings</div>
+    <div class="lbl px" style="margin-bottom:8px">Account</div>
+    <div class="card" style="margin-bottom:20px;padding:14px 16px">
+      <div class="p" style="font-size:13px;margin-bottom:2px">Email</div>
+      <div class="su" style="font-size:13px">orkun@example.com</div>
+    </div>
+    <div class="lbl px" style="margin-bottom:8px">Progress</div>
+    <div class="card" style="margin-bottom:20px;padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span class="mu">Days completed</span><span class="mono">3 of 30</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span class="mu">Streak</span><span class="mono">3 days</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span class="mu">Started</span><span class="mono">2 days ago</span></div>
+    </div>
+    <div class="lbl px" style="color:var(--er);opacity:.7;margin-bottom:10px">Danger Zone</div>
+    <button class="btn btn2" style="margin-bottom:10px">Delete all my data</button>
+    <div class="p px" style="font-size:12px">This cannot be undone. Your recordings and progress will be permanently deleted.</div>
+  </div>
+</div></div>
+
+<!-- 19 GRADUATION -->
+<div class="sw"><div class="sl">19 — Graduation — Day 30 Complete</div>
+<div class="ph">
+  <div class="nav"><span class="logo">Storied</span></div>
+  <div style="padding:24px 0 32px">
+    <div class="lba px ct" style="margin-bottom:8px">Day 30</div>
+    <div class="h1 px ct" style="margin-bottom:14px">You did the work.</div>
+    <div class="p px ct" style="margin-bottom:28px">Thirty days. Sixty recordings.<br>Five frameworks. One voice.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:10px">Your Journey</div>
+    <div class="p17 px" style="color:var(--fg);margin-bottom:24px">Day 1 score: 45 → Day 30 score: 82<br>+37 points across 30 days of practice.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:10px">What Changed Most</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:24px">Structure. You started every story from the middle. Now you find the beginning — the specific moment before the change — and hold it long enough for the listener to feel it.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:10px">What Stayed Strongest</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:24px">Authenticity. Even on Day 1, your voice was yours. The frameworks sharpened it — they didn't replace it.</div>
+    <div class="div" style="margin-bottom:20px"></div>
+    <div class="lbl px" style="margin-bottom:10px">Carry This Forward</div>
+    <div class="p15 px" style="color:var(--fg);margin-bottom:28px">Open on the sensory detail. Find the hinge. Name the two voices. Lead with stake. These are reflexes now.</div>
+    <button class="btn" style="margin-bottom:12px">View your full archive</button>
+    <div class="p px ct" style="font-size:13px">Share your story</div>
+  </div>
+</div></div>
+
+</div>
+
+<script>
+function wf(id, count, amber, seed) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (var i = 0; i < count; i++) {
+    var h = Math.max(3, Math.round(28 * (0.2 + 0.7 * Math.abs(Math.sin(i * (seed||0.45) + 1)))));
+    var d = document.createElement('div');
+    d.style.height = h + 'px';
+    d.style.flex = '1';
+    d.style.background = amber ? 'var(--am)' : 'var(--b2)';
+    d.style.opacity = amber ? (0.5 + (i/count)*0.5).toFixed(2) : '0.6';
+    el.appendChild(d);
+  }
+}
+wf('wf0',  56, true,  0.45);
+wf('wf9',  50, true,  0.55);
+wf('wf11', 50, false, 0.45);
+wf('wf14', 50, true,  0.40);
+wf('wf15a',46, false, 0.45);
+wf('wf15b',46, true,  0.38);
+</script>
+</body>
+</html>

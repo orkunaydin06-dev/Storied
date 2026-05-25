@@ -1,74 +1,46 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export function FoundingOffer() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.remove('reveal-hidden');
-          el.classList.add('reveal-visible');
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      className="max-w-2xl mx-auto px-4 py-16 md:py-24 border-t border-border-subtle text-center reveal-hidden"
-    >
-      <p className="font-mono text-xs uppercase tracking-wider text-fg-subtle mb-4">
-        Founding storytellers
-      </p>
-      <div className="ink-divider mb-10" />
+    <section className="max-w-md mx-auto px-6 py-12">
+      <div className="space-y-2 text-center mb-8">
+        <span className="text-[10px] font-bold tracking-[0.4em] text-accent-warm uppercase">
+          Founding Storytellers
+        </span>
+      </div>
 
-      {/* Card */}
       <div
-        className="relative rounded-2xl px-8 py-10 md:px-12 md:py-12 overflow-hidden"
+        className="rounded-2xl p-7 border border-accent-warm/20"
         style={{
-          background: 'linear-gradient(145deg, rgba(28,49,72,0.8) 0%, rgba(20,37,54,0.9) 100%)',
-          border: '1px solid rgba(232,181,71,0.2)',
-          boxShadow: '0 0 40px rgba(232,181,71,0.06), 0 8px 32px rgba(0,0,0,0.3)',
+          background: 'rgba(19,28,42,0.6)',
+          boxShadow: '0 0 40px rgba(217,160,91,0.06)',
         }}
       >
-        {/* Subtle amber corner glow */}
-        <div
-          className="absolute -bottom-12 -right-12 w-48 h-48 pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(232,181,71,0.1) 0%, transparent 70%)',
-            filter: 'blur(20px)',
-          }}
-          aria-hidden="true"
-        />
-
-        <h2 className="relative font-serif text-3xl md:text-4xl text-fg-primary mb-5">
+        <h2 className="font-heading text-2xl text-fg-primary mb-3">
           $29 — for the first 50 customers.
         </h2>
-
-        <p className="relative font-sans text-sm text-fg-muted mb-1">
-          After that, $39. After 200 customers, $49.
-        </p>
-        <p className="relative font-sans text-sm text-fg-muted mb-10">
+        <p className="text-fg-muted text-sm mb-2">After that, $39. After 200 customers, $49.</p>
+        <p className="text-fg-muted text-sm mb-7">
           The practice is the same. The price is the only thing that changes.
         </p>
 
-        <Button size="lg" onClick={() => window.location.href = '/welcome'}>
+        <Link
+          href="/welcome"
+          className="block w-full py-5 rounded-2xl font-bold text-black text-center hover:scale-[1.02] active:scale-[0.98] transition-all"
+          style={{
+            background: 'linear-gradient(to right, #d9a05b, #f5d0a0, #d9a05b)',
+            backgroundSize: '200% auto',
+            animation: 'shimmer 3s linear infinite',
+            boxShadow: '0 15px 40px rgba(217,160,91,0.25)',
+          }}
+        >
           Begin your practice — $29
-        </Button>
+        </Link>
 
-        <p className="relative font-sans text-xs text-fg-subtle mt-5">
-          One-time payment. No subscription. 30-day practice, yours forever.
+        <p className="text-[10px] text-fg-muted text-center mt-4 tracking-[0.15em] uppercase">
+          One-time payment. No subscription. Yours forever.
         </p>
       </div>
     </section>

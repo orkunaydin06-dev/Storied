@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graduation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+    <style type="text/tailwindcss">
+      @theme inline {
+        --color-background: var(--background);
+        --color-foreground: var(--foreground);
+        --color-primary: var(--primary);
+        --color-primary-foreground: var(--primary-foreground);
+        --color-secondary: var(--secondary);
+        --color-secondary-foreground: var(--secondary-foreground);
+        --color-muted: var(--muted);
+        --color-muted-foreground: var(--muted-foreground);
+        --color-accent: var(--accent);
+        --color-accent-foreground: var(--accent-foreground);
+        --color-destructive: var(--destructive);
+        --color-card: var(--card);
+        --color-card-foreground: var(--card-foreground);
+        --color-popover: var(--popover);
+        --color-popover-foreground: var(--popover-foreground);
+        --color-border: var(--border);
+        --color-input: var(--input);
+        --color-ring: var(--ring);
+        --color-chart-1: var(--chart-1);
+        --color-chart-2: var(--chart-2);
+        --color-chart-3: var(--chart-3);
+        --color-chart-4: var(--chart-4);
+        --color-chart-5: var(--chart-5);
+
+        --font-font-sans: var(--font-sans);
+        --font-font-heading: var(--font-heading);
+        --font-font-serif: var(--font-serif);
+        --font-font-mono: var(--font-mono);
+      }
+
+      @theme {
+        --radius-xs: calc(var(--radius) - 8px);
+        --radius-sm: calc(var(--radius) - 4px);
+        --radius-md: calc(var(--radius) - 2px);
+        --radius-lg: var(--radius);
+        --radius-xl: calc(var(--radius) + 4px);
+        --radius-2xl: calc(var(--radius) + 8px);
+        --radius-3xl: calc(var(--radius) + 16px);
+        --radius-4xl: calc(var(--radius) + 24px);
+      }
+
+      * {
+        corner-shape: var(--shape, round);
+      }
+
+      .rounded-full, .rounded-none,
+      .rounded-t-full, .rounded-t-none,
+      .rounded-r-full, .rounded-r-none,
+      .rounded-b-full, .rounded-b-none,
+      .rounded-l-full, .rounded-l-none,
+      .rounded-s-full, .rounded-s-none,
+      .rounded-e-full, .rounded-e-none,
+      .rounded-tl-full, .rounded-tl-none,
+      .rounded-tr-full, .rounded-tr-none,
+      .rounded-bl-full, .rounded-bl-none,
+      .rounded-br-full, .rounded-br-none,
+      .rounded-ss-full, .rounded-ss-none,
+      .rounded-se-full, .rounded-se-none,
+      .rounded-es-full, .rounded-es-none,
+      .rounded-ee-full, .rounded-ee-none {
+        corner-shape: round;
+      }
+
+      @utility rounded-* {
+        border-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-t-* {
+        border-top-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-top-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-r-* {
+        border-top-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-bottom-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-b-* {
+        border-bottom-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-bottom-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-l-* {
+        border-top-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-bottom-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-tl-* {
+        border-top-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-tr-* {
+        border-top-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-bl-* {
+        border-bottom-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-br-* {
+        border-bottom-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-s-* {
+        border-start-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-end-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-e-* {
+        border-start-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-end-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-ss-* {
+        border-start-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-se-* {
+        border-start-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-es-* {
+        border-end-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-ee-* {
+        border-end-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+
+      :root {
+        --shape: squircle;
+        --shape-multiplier: 1;
+
+          --background: #090E17;
+        --foreground: #E2E8F0;
+        --primary: #d9a05b;
+        --primary-foreground: #0a0a0a;
+        --secondary: #151E2E;
+        --secondary-foreground: #E2E8F0;
+        --muted: #1E293B;
+        --muted-foreground: #94A3B8;
+        --accent: #D9A05B;
+        --accent-foreground: #090E17;
+        --destructive: #7F1D1D;
+        --card: #131C2A;
+        --card-foreground: #E2E8F0;
+        --popover: #090E17;
+        --popover-foreground: #E2E8F0;
+        --border: #1E2A3B;
+        --input: #131C2A;
+        --ring: #E5AD4F;
+        --chart-1: #e5ad4f;
+        --chart-2: #60a5fa;
+        --chart-3: #10b981;
+        --chart-4: #6B502C;
+        --chart-5: #362816;
+
+        --font-sans: "Inter";
+        --font-heading: "Playfair Display";
+        --font-serif: "Playfair Display";
+        --font-mono: "JetBrains Mono";
+
+        --radius: 0.75rem;
+      }
+
+      @supports (corner-shape: squircle) {
+        :root {
+          --shape-multiplier: 2.5;
+        }
+      }
+
+      /* Prevent layout shift for icons without explicit dimensions */
+      iconify-icon:not([width]):not([height]) {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+      }
+
+      /* Hide scrollbars */
+      *,
+      *::before,
+      *::after {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      *::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="relative min-h-screen bg-background text-foreground overflow-hidden font-sans pb-24"
+    >
+      <img
+        alt="Golden particle background"
+        src="https://ggrhecslgdflloszjkwl.supabase.co/storage/v1/object/public/user-assets/XYzUi4QdzmU/components/PhjhXJETUGs.png"
+        class="absolute inset-0 w-[200%] h-[200%] -top-[50%] -left-[50%] object-cover opacity-[0.2] mix-blend-screen pointer-events-none animate-[spin_300s_linear_infinite]"
+      />
+      <div class="relative z-10 px-6 py-12 max-w-md mx-auto min-h-screen flex flex-col text-center">
+        <div class="mb-16 animate-in fade-in zoom-in duration-1000">
+          <div class="relative size-20 mx-auto mb-8">
+            <div class="absolute inset-0 bg-accent/40 blur-2xl rounded-full animate-pulse"></div>
+            <div
+              class="relative size-full border-2 border-accent rounded-full flex items-center justify-center backdrop-blur-md shadow-[0_0_30px_rgba(217,160,91,0.4)]"
+            >
+              <iconify-icon
+                icon="ph:crown-fill"
+                class="text-accent text-3xl animate-bounce"
+              ></iconify-icon>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold tracking-[0.5em] text-accent uppercase mb-4 block"
+            >Day 30</span
+          >
+          <h1 class="font-heading text-5xl mb-6">You did<br />the work.</h1>
+          <p class="text-muted-foreground text-lg leading-relaxed">
+            Thirty days. Sixty recordings.<br />Five frameworks. One voice.
+          </p>
+        </div>
+        <div
+          class="space-y-8 text-left mb-16 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300"
+        >
+          <section class="p-6 rounded-2xl bg-card/40 border border-accent/20 backdrop-blur-sm">
+            <h3 class="text-[10px] font-bold tracking-widest text-accent uppercase mb-4">
+              Your Journey
+            </h3>
+            <div class="flex items-end gap-3 mb-2">
+              <span class="text-4xl font-heading text-muted-foreground">45</span
+              ><iconify-icon
+                icon="ph:arrow-right"
+                class="text-2xl mb-2 text-accent/50"
+              ></iconify-icon
+              ><span class="text-6xl font-heading text-foreground">82</span>
+            </div>
+            <p class="text-sm text-muted-foreground font-medium">
+              +37 points across 30 days of practice.
+            </p>
+          </section>
+          <section class="space-y-6">
+            <div class="space-y-2">
+              <h4 class="text-xs font-bold tracking-widest text-muted-foreground uppercase">
+                What changed most
+              </h4>
+              <p class="text-foreground leading-relaxed">
+                Structure. You started every story from the middle. Now you find the beginning — the
+                specific moment before the change — and hold it long enough for the listener to feel
+                it.
+              </p>
+            </div>
+            <div class="space-y-2">
+              <h4 class="text-xs font-bold tracking-widest text-muted-foreground uppercase">
+                What stayed strongest
+              </h4>
+              <p class="text-foreground leading-relaxed">
+                Authenticity. Even on Day 1, your voice was yours. The frameworks sharpened it —
+                they didn't replace it.
+              </p>
+            </div>
+            <div class="space-y-2">
+              <h4 class="text-xs font-bold tracking-widest text-muted-foreground uppercase">
+                Carry this forward
+              </h4>
+              <p class="text-accent leading-relaxed font-medium italic">
+                "Open on the sensory detail. Find the hinge. Name the two voices. Lead with stake.
+                These are reflexes now."
+              </p>
+            </div>
+          </section>
+        </div>
+        <div
+          class="mt-auto space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700"
+        >
+          <button
+            class="w-full py-5 rounded-2xl bg-gradient-to-r from-[#d9a05b] via-[#f5d0a0] to-[#d9a05b] bg-[length:200%_auto] animate-[shimmer_3s_linear_infinite] text-black font-bold text-lg shadow-[0_15px_40px_rgba(217,160,91,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all"
+          >
+            View your full archive</button
+          ><button
+            class="w-full py-4 text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+          >
+            Share your story
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

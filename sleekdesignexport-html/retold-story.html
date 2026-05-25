@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RetoldStory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+    <style type="text/tailwindcss">
+      @theme inline {
+        --color-background: var(--background);
+        --color-foreground: var(--foreground);
+        --color-primary: var(--primary);
+        --color-primary-foreground: var(--primary-foreground);
+        --color-secondary: var(--secondary);
+        --color-secondary-foreground: var(--secondary-foreground);
+        --color-muted: var(--muted);
+        --color-muted-foreground: var(--muted-foreground);
+        --color-accent: var(--accent);
+        --color-accent-foreground: var(--accent-foreground);
+        --color-destructive: var(--destructive);
+        --color-card: var(--card);
+        --color-card-foreground: var(--card-foreground);
+        --color-popover: var(--popover);
+        --color-popover-foreground: var(--popover-foreground);
+        --color-border: var(--border);
+        --color-input: var(--input);
+        --color-ring: var(--ring);
+        --color-chart-1: var(--chart-1);
+        --color-chart-2: var(--chart-2);
+        --color-chart-3: var(--chart-3);
+        --color-chart-4: var(--chart-4);
+        --color-chart-5: var(--chart-5);
+
+        --font-font-sans: var(--font-sans);
+        --font-font-heading: var(--font-heading);
+        --font-font-serif: var(--font-serif);
+        --font-font-mono: var(--font-mono);
+      }
+
+      @theme {
+        --radius-xs: calc(var(--radius) - 8px);
+        --radius-sm: calc(var(--radius) - 4px);
+        --radius-md: calc(var(--radius) - 2px);
+        --radius-lg: var(--radius);
+        --radius-xl: calc(var(--radius) + 4px);
+        --radius-2xl: calc(var(--radius) + 8px);
+        --radius-3xl: calc(var(--radius) + 16px);
+        --radius-4xl: calc(var(--radius) + 24px);
+      }
+
+      * {
+        corner-shape: var(--shape, round);
+      }
+
+      .rounded-full, .rounded-none,
+      .rounded-t-full, .rounded-t-none,
+      .rounded-r-full, .rounded-r-none,
+      .rounded-b-full, .rounded-b-none,
+      .rounded-l-full, .rounded-l-none,
+      .rounded-s-full, .rounded-s-none,
+      .rounded-e-full, .rounded-e-none,
+      .rounded-tl-full, .rounded-tl-none,
+      .rounded-tr-full, .rounded-tr-none,
+      .rounded-bl-full, .rounded-bl-none,
+      .rounded-br-full, .rounded-br-none,
+      .rounded-ss-full, .rounded-ss-none,
+      .rounded-se-full, .rounded-se-none,
+      .rounded-es-full, .rounded-es-none,
+      .rounded-ee-full, .rounded-ee-none {
+        corner-shape: round;
+      }
+
+      @utility rounded-* {
+        border-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-t-* {
+        border-top-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-top-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-r-* {
+        border-top-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-bottom-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-b-* {
+        border-bottom-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-bottom-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-l-* {
+        border-top-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-bottom-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-tl-* {
+        border-top-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-tr-* {
+        border-top-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-bl-* {
+        border-bottom-left-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-br-* {
+        border-bottom-right-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-s-* {
+        border-start-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-end-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-e-* {
+        border-start-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+        border-end-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-ss-* {
+        border-start-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-se-* {
+        border-start-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-es-* {
+        border-end-start-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+      @utility rounded-ee-* {
+        border-end-end-radius: calc(--value(--radius-*, [length], [percentage]) * var(--shape-multiplier, 1));
+      }
+
+      :root {
+        --shape: squircle;
+        --shape-multiplier: 1;
+
+          --background: #090E17;
+        --foreground: #E2E8F0;
+        --primary: #d9a05b;
+        --primary-foreground: #0a0a0a;
+        --secondary: #151E2E;
+        --secondary-foreground: #E2E8F0;
+        --muted: #1E293B;
+        --muted-foreground: #94A3B8;
+        --accent: #D9A05B;
+        --accent-foreground: #090E17;
+        --destructive: #7F1D1D;
+        --card: #131C2A;
+        --card-foreground: #E2E8F0;
+        --popover: #090E17;
+        --popover-foreground: #E2E8F0;
+        --border: #1E2A3B;
+        --input: #131C2A;
+        --ring: #E5AD4F;
+        --chart-1: #e5ad4f;
+        --chart-2: #60a5fa;
+        --chart-3: #10b981;
+        --chart-4: #6B502C;
+        --chart-5: #362816;
+
+        --font-sans: "Inter";
+        --font-heading: "Playfair Display";
+        --font-serif: "Playfair Display";
+        --font-mono: "JetBrains Mono";
+
+        --radius: 0.75rem;
+      }
+
+      @supports (corner-shape: squircle) {
+        :root {
+          --shape-multiplier: 2.5;
+        }
+      }
+
+      /* Prevent layout shift for icons without explicit dimensions */
+      iconify-icon:not([width]):not([height]) {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+      }
+
+      /* Hide scrollbars */
+      *,
+      *::before,
+      *::after {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      *::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="relative min-h-screen bg-background text-foreground overflow-hidden font-sans">
+      <img
+        alt="Golden particle background"
+        src="https://ggrhecslgdflloszjkwl.supabase.co/storage/v1/object/public/user-assets/XYzUi4QdzmU/components/PhjhXJETUGs.png"
+        class="absolute inset-0 w-[200%] h-[200%] -top-[50%] -left-[50%] object-cover opacity-[0.1] mix-blend-screen pointer-events-none"
+      />
+      <div class="relative z-10 px-6 py-12 flex flex-col min-h-screen max-w-md mx-auto">
+        <nav class="flex justify-between items-center mb-10">
+          <div class="flex items-center gap-2">
+            <iconify-icon icon="ph:infinite-bold" class="text-accent text-lg"></iconify-icon
+            ><span class="font-heading font-bold text-sm tracking-widest uppercase">Storied</span>
+          </div>
+          <a
+            href="screen-CaF2nCAB7j2"
+            class="text-xs font-medium text-muted-foreground hover:text-foreground"
+            >Exit practice</a
+          >
+        </nav>
+        <div class="mb-8">
+          <span class="text-[10px] font-bold tracking-[0.3em] text-accent uppercase mb-4 block"
+            >Before Recording 2</span
+          >
+          <div class="flex border-b border-border/30">
+            <a
+              href="screen-Revise Micro-revision"
+              class="flex-1 pb-4 text-center text-muted-foreground hover:text-foreground transition-all"
+              >Micro-revision</a
+            ><a
+              href="screen-Retold Story"
+              class="flex-1 pb-4 text-center border-b-2 border-accent text-foreground font-medium transition-all"
+              >How it could be told</a
+            >
+          </div>
+        </div>
+        <div class="space-y-2 mb-8 animate-in fade-in duration-700">
+          <span class="text-[10px] font-bold tracking-[0.2em] text-muted-foreground uppercase"
+            >Aristotle's Poetics</span
+          >
+          <p class="text-xs text-muted-foreground">Tap an element to highlight it in the story.</p>
+          <div class="flex flex-wrap gap-2 mt-4">
+            <span
+              class="px-2.5 py-1 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] font-bold"
+              >Beginning</span
+            ><span
+              class="px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold"
+              >Inciting Incident</span
+            ><span
+              class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold"
+              >Conflict</span
+            >
+          </div>
+        </div>
+        <div
+          class="space-y-4 mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200"
+        >
+          <div class="bg-card/30 border-l-2 border-accent p-4 rounded-r-xl">
+            <span class="text-[9px] font-bold tracking-widest text-accent uppercase mb-2 block"
+              >Beginning</span
+            >
+            <p class="text-[15px] leading-relaxed">
+              It was a Tuesday. I know because Tuesdays were always the same — coffee at 7:15, the
+              same train, the same headphones, the same playlist.
+            </p>
+          </div>
+          <div class="bg-card/30 border-l-2 border-blue-400 p-4 rounded-r-xl">
+            <span class="text-[9px] font-bold tracking-widest text-blue-400 uppercase mb-2 block"
+              >Inciting Incident</span
+            >
+            <p class="text-[15px] leading-relaxed">
+              The message arrived at 9:47, while I was in a meeting about Q3 projections. One line.
+              My father's number.
+            </p>
+          </div>
+          <div class="bg-card/30 border-l-2 border-emerald-400 p-4 rounded-r-xl">
+            <span class="text-[9px] font-bold tracking-widest text-emerald-400 uppercase mb-2 block"
+              >Conflict</span
+            >
+            <p class="text-[15px] leading-relaxed">
+              Two parts of me collided: the professional who couldn't leave, and the son who knew
+              this call didn't happen on ordinary days.
+            </p>
+          </div>
+          <div class="bg-card/30 border-l-2 border-purple-400 p-4 rounded-r-xl">
+            <span class="text-[9px] font-bold tracking-widest text-purple-400 uppercase mb-2 block"
+              >Recognition</span
+            >
+            <p class="text-[15px] leading-relaxed">
+              I stepped out. The corridor was empty. I realised I had been treating every Tuesday
+              like it was guaranteed.
+            </p>
+          </div>
+        </div>
+        <p class="text-[11px] text-muted-foreground text-center mb-8 italic">
+          Your story, retold through the framework. Use it as a reference — not a script.
+        </p>
+        <a
+          href="screen-Revised Recording"
+          class="w-full bg-primary text-primary-foreground font-semibold py-4 rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          >Record again</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

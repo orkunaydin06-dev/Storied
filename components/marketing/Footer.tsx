@@ -8,38 +8,25 @@ const links = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-border-subtle/50 px-4 py-12 md:py-16">
-      <div className="ink-divider mb-10" />
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="text-center md:text-left">
-          <p className="font-serif text-base text-fg-muted">
-            Storied — Built in Dublin
-          </p>
-          <a
-            href="mailto:hello@storied.app"
-            className="font-sans text-sm text-fg-subtle hover:text-fg-muted transition-colors duration-200"
-          >
-            hello@storied.app
-          </a>
-        </div>
-
-        <nav className="flex items-center gap-6" aria-label="Footer navigation">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-sans text-sm text-fg-subtle hover:text-fg-muted transition-colors duration-200"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <a
-            href="mailto:hello@storied.app"
-            className="font-sans text-sm text-fg-subtle hover:text-fg-muted transition-colors duration-200"
-          >
-            Contact
-          </a>
-        </nav>
+    <footer className="mt-auto pt-16 border-t border-border-subtle/50 text-center pb-12 max-w-md mx-auto px-6">
+      <div className="space-y-1 mb-6">
+        <p className="text-xs text-fg-muted">Storied — Built in Dublin</p>
+        <a
+          href="mailto:hello@storied.app"
+          className="text-xs text-fg-muted hover:text-accent-warm transition-colors"
+        >
+          hello@storied.app
+        </a>
+      </div>
+      <div className="flex justify-center gap-6 text-[10px] font-bold tracking-widest text-fg-muted uppercase">
+        {links.map((l) => (
+          <Link key={l.href} href={l.href} className="hover:text-accent-warm transition-colors">
+            {l.label}
+          </Link>
+        ))}
+        <a href="mailto:hello@storied.app" className="hover:text-accent-warm transition-colors">
+          Contact
+        </a>
       </div>
     </footer>
   );

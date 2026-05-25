@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import { Lora, Inter, JetBrains_Mono } from 'next/font/google';
+import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google';
 import { PostHogProvider } from '@/components/providers/PostHogProvider';
 import './globals.css';
 
-const lora = Lora({
+const playfair = Playfair_Display({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-lora',
-  weight: ['400', '500', '600', '700'],
+  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700', '800', '900'],
   style: ['normal', 'italic'],
 });
 
@@ -15,7 +15,7 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -78,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${lora.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-bg-primary text-fg-primary font-sans antialiased">
         <PostHogProvider>{children}</PostHogProvider>

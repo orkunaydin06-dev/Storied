@@ -1,30 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 export function EmailCapture() {
   const [email, setEmail] = useState('');
   const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.remove('reveal-hidden');
-          el.classList.add('reveal-visible');
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,50 +23,37 @@ export function EmailCapture() {
   }
 
   return (
-    <section
-      ref={sectionRef}
-      className="max-w-2xl mx-auto px-4 py-16 md:py-24 border-t border-border-subtle reveal-hidden"
-    >
-      <p className="font-sans text-sm text-fg-muted mb-1">Not ready to start?</p>
-      <h3 className="font-serif text-2xl text-fg-primary mb-4">
-        Leave your email.
-      </h3>
-      <p className="font-sans text-sm text-fg-muted mb-8 leading-relaxed">
-        {"We'll send a free 7-day storytelling primer — one short lesson a day,"}
-        {' '}drawn from the same methods as the full practice. No spam. No sales.
-        Just craft.
+    <section className="max-w-md mx-auto px-6 py-12 border-t border-border-subtle/50">
+      <p className="text-fg-muted text-sm mb-1">Not ready to start?</p>
+      <h3 className="font-heading text-2xl text-fg-primary mb-4">Leave your email.</h3>
+      <p className="text-fg-muted text-sm mb-8 leading-relaxed">
+        {"We'll send a free 7-day storytelling primer — one short lesson a day. No spam. No sales. Just craft."}
       </p>
 
       {state === 'done' ? (
-        <p className="font-sans text-sm text-fg-primary animate-fade-in">
-          Day 1 of the primer arrives tomorrow.
-        </p>
+        <p className="text-sm text-fg-primary animate-fade-in">Day 1 of the primer arrives tomorrow.</p>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-          <Input
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <input
             type="email"
             placeholder="your@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            aria-label="Email address"
-            className="flex-1 bg-bg-secondary/60 backdrop-blur-sm border-border-visible focus:border-accent-warm/60 transition-colors duration-200"
+            className="w-full px-4 py-4 rounded-2xl border border-border-visible bg-bg-secondary/40 text-fg-primary placeholder:text-fg-subtle focus:border-accent-warm/50 focus:ring-1 focus:ring-accent-warm/20 outline-none transition-all"
           />
-          <Button
+          <button
             type="submit"
-            variant="secondary"
             disabled={state === 'loading'}
-            className="shrink-0"
+            className="w-full py-4 rounded-2xl border border-border-visible text-fg-primary font-medium hover:border-accent-warm/40 hover:bg-bg-secondary transition-all disabled:opacity-50"
           >
             {state === 'loading' ? 'Sending...' : 'Send the primer'}
-          </Button>
+          </button>
         </form>
       )}
 
       {state === 'error' && (
-        <p className="font-sans text-xs text-error mt-3">
-          Something went wrong. Try again.
-        </p>
+        <p className="text-xs text-error mt-3">Something went wrong. Try again.</p>
       )}
     </section>
   );

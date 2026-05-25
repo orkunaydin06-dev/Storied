@@ -1,99 +1,90 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { HeroWaveform } from './HeroWaveform';
-export function Hero() {
+import Link from 'next/link';
 
+export function Hero() {
   return (
-    <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-4 py-32 text-center overflow-hidden">
-      {/* Aurora background */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Moon ambient glow — top center */}
-        <div
-          className="absolute animate-aurora-a"
-          style={{
-            top: '-20%',
-            left: '10%',
-            width: '70%',
-            height: '70%',
-            background: 'radial-gradient(ellipse at center, rgba(100,160,220,0.13) 0%, transparent 70%)',
-            borderRadius: '50%',
-            filter: 'blur(40px)',
-          }}
-        />
-        {/* Amber glow — bottom right */}
-        <div
-          className="absolute animate-aurora-b"
-          style={{
-            bottom: '-10%',
-            right: '-5%',
-            width: '55%',
-            height: '55%',
-            background: 'radial-gradient(ellipse at center, rgba(232,181,71,0.08) 0%, transparent 70%)',
-            borderRadius: '50%',
-            filter: 'blur(50px)',
-          }}
-        />
-        {/* Bottom vignette */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-48"
-          style={{
-            background: 'linear-gradient(to top, #0b1929 0%, transparent 100%)',
-          }}
-        />
+    <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 pt-32 pb-24 text-center max-w-md mx-auto">
+      {/* Badge */}
+      <div
+        className="inline-flex items-center gap-2 border border-accent-warm/20 px-4 py-2 rounded-full mb-6 animate-fade-in"
+        style={{ background: 'rgba(217,160,91,0.08)' }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-accent-warm animate-pulse" />
+        <span className="text-[9px] font-bold tracking-[0.3em] text-accent-warm uppercase">
+          Founding Storytellers — $29
+        </span>
       </div>
 
-      {/* Content */}
-      <p className="relative font-mono text-xs uppercase tracking-widest text-fg-subtle mb-10 animate-fade-in">
-        Founding storytellers — $29
-      </p>
-
+      {/* Headline */}
       <h1
-        className="relative font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05] tracking-[-0.02em] max-w-3xl animate-fade-in"
-        style={{
-          animationDelay: '100ms',
-          background: 'linear-gradient(170deg, #f5f1eb 30%, rgba(232,181,71,0.75) 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}
+        className="font-heading text-5xl leading-[1.1] mb-6 text-fg-primary animate-fade-in"
+        style={{ animationDelay: '100ms' }}
       >
-        The daily practice
-        <br />
-        <em className="not-italic" style={{ fontStyle: 'italic' }}>of being</em> a storyteller.
+        The daily practice<br />of being a<br />storyteller.
       </h1>
 
       <p
-        className="relative font-sans text-base md:text-lg text-fg-muted mt-8 max-w-md leading-relaxed animate-fade-in"
+        className="text-fg-muted text-lg mb-10 leading-relaxed animate-fade-in"
         style={{ animationDelay: '200ms' }}
       >
-        Ten minutes a day. Thirty practices.
-        <br />
+        Ten minutes a day. Thirty practices.<br />
         The methods you know, finally practiced.
       </p>
 
+      {/* CTA */}
       <div
-        className="relative mt-12 animate-fade-in"
-        style={{ animationDelay: '350ms' }}
+        className="w-full animate-fade-in"
+        style={{ animationDelay: '300ms' }}
       >
-        <Button size="lg" onClick={() => window.location.href = '/welcome'}>
+        <Link
+          href="/welcome"
+          className="w-full py-5 rounded-2xl font-bold text-black text-lg flex items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-all"
+          style={{
+            background: 'linear-gradient(to right, #d9a05b, #f5d0a0, #d9a05b)',
+            backgroundSize: '200% auto',
+            animation: 'shimmer 3s linear infinite',
+            boxShadow: '0 20px 50px rgba(217,160,91,0.3)',
+          }}
+        >
           Begin your practice — $29
-        </Button>
+        </Link>
       </div>
 
-      <p
-        className="relative font-sans text-xs text-fg-subtle mt-5 animate-fade-in"
-        style={{ animationDelay: '450ms' }}
-      >
-        One-time payment. No subscription. No auto-charge.
-      </p>
-
-      {/* Waveform — below CTA */}
       <div
-        className="relative w-full max-w-sm mt-16 animate-fade-in"
-        style={{ animationDelay: '600ms' }}
+        className="flex flex-col items-center gap-6 mt-8 animate-fade-in"
+        style={{ animationDelay: '400ms' }}
       >
-        <HeroWaveform />
+        <p className="text-[10px] tracking-[0.2em] text-fg-muted uppercase">
+          One-time payment. No subscription.
+        </p>
+        <svg
+          className="w-4 h-4 text-accent-warm opacity-40"
+          style={{ animation: 'bounce-soft 2s ease-in-out infinite' }}
+          fill="currentColor" viewBox="0 0 24 24"
+        >
+          <path d="M12 16.5l-8-8 1.4-1.4L12 13.7l6.6-6.6L20 8.5l-8 8z" />
+          <path d="M12 11.5l-8-8 1.4-1.4L12 8.7l6.6-6.6L20 3.5l-8 8z" />
+        </svg>
+      </div>
+
+      {/* Waveform */}
+      <div
+        className="flex justify-center gap-1 mt-12 animate-fade-in"
+        style={{ animationDelay: '500ms' }}
+      >
+        {[8, 12, 16, 20, 24, 28, 32, 36, 32, 28, 24, 20, 16, 12, 8].map((h, i) => (
+          <div
+            key={i}
+            className="w-1 rounded-full"
+            style={{
+              height: h,
+              background: `rgba(217,160,91,${0.2 + (h / 36) * 0.8})`,
+              animation: `waveform-wave ${1.4 + i * 0.05}s ease-in-out infinite alternate`,
+              animationDelay: `${i * 50}ms`,
+            }}
+          />
+        ))}
       </div>
     </section>
   );

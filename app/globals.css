@@ -10,25 +10,28 @@
 
 @theme inline {
   /* Fonts — resolved from Next.js CSS variables on <html> */
-  --font-serif: var(--font-lora), Georgia, serif;
+  --font-heading: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  --font-serif: var(--font-playfair), 'Playfair Display', Georgia, serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), monospace;
 
   /* Backgrounds */
-  --color-bg-primary: #0b1929;
-  --color-bg-secondary: #142536;
-  --color-bg-tertiary: #1c3148;
-  --color-bg-overlay: rgba(11, 25, 41, 0.85);
+  --color-bg-primary: #090e17;
+  --color-bg-secondary: #131c2a;
+  --color-bg-tertiary: #1e293b;
+  --color-bg-card: #131c2a;
+  --color-bg-muted: #1e293b;
+  --color-bg-overlay: rgba(9, 14, 23, 0.85);
 
   /* Foregrounds */
-  --color-fg-primary: #f5f1eb;
-  --color-fg-muted: #a8b0bc;
-  --color-fg-subtle: #6b7484;
+  --color-fg-primary: #e2e8f0;
+  --color-fg-muted: #94a3b8;
+  --color-fg-subtle: #64748b;
 
   /* Accents */
-  --color-accent-warm: #e8b547;
-  --color-accent-warm-hover: #f0c463;
-  --color-accent-warm-muted: #8e6f2c;
+  --color-accent-warm: #d9a05b;
+  --color-accent-warm-hover: #e8b577;
+  --color-accent-warm-muted: #8b652e;
 
   /* Semantic */
   --color-success: #6ba888;
@@ -36,9 +39,9 @@
   --color-error: #b26b6b;
 
   /* Borders */
-  --color-border-subtle: #1f3349;
-  --color-border-visible: #2a4259;
-  --color-border-active: #e8b547;
+  --color-border-subtle: #1e2a3b;
+  --color-border-visible: #2a3a52;
+  --color-border-active: #d9a05b;
 
   /* ── PREMIUM SHADOWS ── */
   --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -76,6 +79,12 @@
   --animate-aurora-a: aurora-drift-a 22s ease-in-out infinite;
   --animate-aurora-b: aurora-drift-b 28s ease-in-out infinite;
   --animate-draw-in: draw-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-particle-spin: particle-spin 300s linear infinite;
+  --animate-spin-slow: spin-slow 10s linear infinite;
+  --animate-spin-logo: spin-logo 10s linear infinite;
+  --animate-bounce-soft: bounce-soft 2s ease-in-out infinite;
+  --animate-fade-in-up: fade-in-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* ─────────────────────────────────────────────────────
@@ -139,6 +148,36 @@
   50% { transform: scaleY(var(--bar-max, 1)); }
 }
 
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes particle-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-logo {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ─────────────────────────────────────────────────────
    BASE
 ───────────────────────────────────────────────────── */
@@ -148,8 +187,8 @@ html {
 }
 
 body {
-  background-color: #0b1929;
-  color: #f5f1eb;
+  background-color: #090e17;
+  color: #e2e8f0;
   font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -276,8 +315,21 @@ audio {
    FOCUS VISIBLE
 ───────────────────────────────────────────────────── */
 
+/* Shimmer button */
+.btn-shimmer {
+  background: linear-gradient(to right, #d9a05b, #f5d0a0, #d9a05b);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  color: #0a0a0a;
+  font-weight: 700;
+}
+
+/* Scrollbar hidden */
+* { scrollbar-width: none; -ms-overflow-style: none; }
+*::-webkit-scrollbar { display: none; }
+
 :focus-visible {
-  outline: 2px solid #e8b547;
+  outline: 2px solid #d9a05b;
   outline-offset: 2px;
   border-radius: 4px;
 }
