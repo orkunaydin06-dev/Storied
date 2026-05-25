@@ -1,35 +1,39 @@
-// Storied — Screen Designs Generator v2
-// Creates all mobile screen mockups (390×844) in a Figma design file
+// Storied — Complete Screen Designs v3
+// All screens with real content, scrollable pages shown at full height
+// 390px wide, variable height
 
-// ─── DESIGN TOKENS ──────────────────────────────────────────────────
+// ─── DESIGN TOKENS ────────────────────────────────────────────────────
 const C = {
-  bgPrimary:     { r: 0.043, g: 0.098, b: 0.161 }, // #0B1929
-  bgSecondary:   { r: 0.078, g: 0.145, b: 0.212 }, // #142536
-  bgTertiary:    { r: 0.110, g: 0.192, b: 0.282 }, // #1C3148
-  fgPrimary:     { r: 0.961, g: 0.945, b: 0.922 }, // #F5F1EB
-  fgMuted:       { r: 0.659, g: 0.690, b: 0.737 }, // #A8B0BC
-  fgSubtle:      { r: 0.420, g: 0.455, b: 0.518 }, // #6B7484
-  accentWarm:    { r: 0.910, g: 0.710, b: 0.278 }, // #E8B547
-  success:       { r: 0.420, g: 0.659, b: 0.533 }, // #6BA888
-  warning:       { r: 0.788, g: 0.533, b: 0.369 }, // #C9885E
-  borderSubtle:  { r: 0.122, g: 0.200, b: 0.286 }, // #1F3349
-  borderVisible: { r: 0.165, g: 0.259, b: 0.349 }, // #2A4259
+  bgPrimary:     { r: 0.043, g: 0.098, b: 0.161 },
+  bgSecondary:   { r: 0.078, g: 0.145, b: 0.212 },
+  bgTertiary:    { r: 0.110, g: 0.192, b: 0.282 },
+  fgPrimary:     { r: 0.961, g: 0.945, b: 0.922 },
+  fgMuted:       { r: 0.659, g: 0.690, b: 0.737 },
+  fgSubtle:      { r: 0.420, g: 0.455, b: 0.518 },
+  accentWarm:    { r: 0.910, g: 0.710, b: 0.278 },
+  success:       { r: 0.420, g: 0.659, b: 0.533 },
+  warning:       { r: 0.788, g: 0.533, b: 0.369 },
+  error:         { r: 0.788, g: 0.369, b: 0.369 },
+  borderSubtle:  { r: 0.122, g: 0.200, b: 0.286 },
+  borderVisible: { r: 0.165, g: 0.259, b: 0.349 },
+  // Exemplar annotation colors
+  amber:  { r: 0.910, g: 0.710, b: 0.278 },
+  blue:   { r: 0.392, g: 0.627, b: 0.863 },
+  green:  { r: 0.482, g: 0.776, b: 0.482 },
+  purple: { r: 0.710, g: 0.482, b: 0.863 },
+  coral:  { r: 0.863, g: 0.545, b: 0.353 },
+  teal:   { r: 0.353, g: 0.824, b: 0.824 },
 };
 
 const W = 390;
-const H = 844;
+let FS, FSI, FSB, FN, FNM, FNB, FM, FMB;
 
-// Fonts — defined after loading
-let FS, FSB, FN, FNM, FNB, FM;
-
-// ─── HELPERS ────────────────────────────────────────────────────────
-
+// ─── HELPERS ──────────────────────────────────────────────────────────
 function sf(color, opacity) {
-  const paint = { type: "SOLID", color: { r: color.r, g: color.g, b: color.b } };
-  if (opacity !== undefined && opacity !== 1) paint.opacity = opacity;
-  return [paint];
+  const p = { type: "SOLID", color: { r: color.r, g: color.g, b: color.b } };
+  if (opacity !== undefined && opacity !== 1) p.opacity = opacity;
+  return [p];
 }
-
 function noFill() { return []; }
 
 function addText(parent, chars, font, size, color, x, y, opts) {
@@ -38,14 +42,14 @@ function addText(parent, chars, font, size, color, x, y, opts) {
   t.characters = String(chars);
   t.fontSize = size;
   t.fills = sf(color);
-  t.x = x;
-  t.y = y;
+  t.x = x; t.y = y;
   if (opts) {
     if (opts.w) { t.resize(opts.w, t.height); t.textAutoResize = "HEIGHT"; }
     if (opts.align) t.textAlignHorizontal = opts.align;
     if (opts.lh) t.lineHeight = { value: opts.lh, unit: "PIXELS" };
     if (opts.ls) t.letterSpacing = { value: opts.ls, unit: "PERCENT" };
     if (opts.opacity != null) t.opacity = opts.opacity;
+    if (opts.decoration) t.textDecoration = opts.decoration;
   }
   parent.appendChild(t);
   return t;
@@ -58,576 +62,754 @@ function addRect(parent, x, y, w, h, color, opts) {
   r.fills = color ? sf(color, opts && opts.opacity) : noFill();
   if (opts) {
     if (opts.radius != null) r.cornerRadius = opts.radius;
-    if (opts.stroke) { r.strokes = sf(opts.stroke); r.strokeWeight = opts.sw || 1; }
+    if (opts.stroke) { r.strokes = sf(opts.stroke, opts.strokeOpacity); r.strokeWeight = opts.sw || 1; }
     if (opts.name) r.name = opts.name;
   }
   parent.appendChild(r);
   return r;
 }
 
-function addEllipse(parent, x, y, w, h, color, opacity) {
-  const e = figma.createEllipse();
-  e.x = x; e.y = y;
-  e.resize(w, h);
-  e.fills = sf(color, opacity);
-  parent.appendChild(e);
-  return e;
-}
-
-function makeScreen(name, col, row) {
-  const GAP = 48;
+function makeFrame(name, height, col, row) {
+  const GAP = 80;
   const f = figma.createFrame();
   f.name = name;
-  f.x = col * (W + GAP);
-  f.y = row * (H + GAP + 40);
-  f.resize(W, H);
+  f.resize(W, height);
   f.fills = sf(C.bgPrimary);
+  f.x = col * (W + GAP);
+  f.y = row * (2000 + GAP);
   f.clipsContent = true;
+  figma.currentPage.appendChild(f);
   return f;
 }
 
-function divider(parent, y) {
-  addRect(parent, 0, y, W, 1, C.borderSubtle);
+// Standard app header (Storied + Exit practice)
+function appHeader(f, showExit) {
+  addRect(f, 0, 0, W, 52, C.bgPrimary);
+  addText(f, "Storied", FS, 16, C.fgMuted, 20, 16);
+  if (showExit) addText(f, "Exit practice", FN, 14, C.fgMuted, W - 20 - 90, 16, { w: 90, align: "RIGHT" });
 }
 
-function statusBar(parent) {
-  addText(parent, "9:41", FNB, 15, C.fgPrimary, 24, 16);
-  // Battery pill
-  addRect(parent, 340, 18, 26, 13, null, { radius: 3, stroke: C.fgMuted, sw: 1.5 });
-  addRect(parent, 342, 20, 17, 9, C.fgPrimary, { radius: 2 });
+// Divider line
+function divider(f, y) {
+  addRect(f, 24, y, W - 48, 1, C.borderSubtle);
+  return y + 1;
 }
 
-function navBar(parent) {
-  statusBar(parent);
-  addText(parent, "Storied", FSB, 18, C.fgPrimary, 24, 56);
-  addText(parent, "Menu", FN, 14, C.fgMuted, W - 64, 58);
-  return 96;
+// Mono label (uppercase tracking)
+function monoLabel(f, text, y, color) {
+  addText(f, text, FM, 10, color || C.fgSubtle, 24, y, { ls: 8 });
 }
 
-function chip(parent, text, x, y, color) {
-  addText(parent, text.toUpperCase(), FM, 10, color || C.accentWarm, x, y, { ls: 8 });
+// Score bar row
+function scoreBar(f, label, value, y) {
+  addText(f, label, FN, 13, C.fgMuted, 24, y, { w: 100 });
+  addRect(f, 24, y + 22, W - 48, 6, C.borderVisible, { radius: 3 });
+  addRect(f, 24, y + 22, Math.round((W - 48) * (value / 100)), 6, C.accentWarm, { radius: 3 });
+  addText(f, String(value), FM, 13, C.fgPrimary, W - 44, y, { w: 20, align: "RIGHT" });
+  return y + 44;
 }
 
-function cardFrame(parent, x, y, w, h, opts) {
-  const f = figma.createFrame();
-  f.x = x; f.y = y;
-  f.resize(w, h);
-  f.fills = sf((opts && opts.fill) || C.bgSecondary);
-  f.cornerRadius = (opts && opts.radius != null) ? opts.radius : 14;
-  f.strokes = sf((opts && opts.stroke) || C.borderSubtle);
-  f.strokeWeight = 1;
-  f.clipsContent = false;
-  parent.appendChild(f);
-  return f;
-}
-
-function primaryBtn(parent, label, x, y, w) {
-  w = w || 310;
-  const btn = cardFrame(parent, x, y, w, 56, { fill: C.accentWarm, radius: 12, stroke: C.accentWarm });
-  addText(btn, label, FNB, 15, C.bgPrimary, 0, 17, { w: w, align: "CENTER" });
-  return btn;
-}
-
-function secondaryBtn(parent, label, x, y, w) {
-  w = w || 310;
-  const btn = figma.createFrame();
-  btn.x = x; btn.y = y;
-  btn.resize(w, 56);
-  btn.fills = noFill();
-  btn.strokes = sf(C.borderVisible);
-  btn.strokeWeight = 1.5;
-  btn.cornerRadius = 12;
-  parent.appendChild(btn);
-  addText(btn, label, FNM, 15, C.fgPrimary, 0, 17, { w: w, align: "CENTER" });
-  return btn;
-}
-
-function inputField(parent, placeholder, x, y, w) {
-  w = w || 310;
-  const inp = cardFrame(parent, x, y, w, 52, { radius: 10, stroke: C.borderSubtle });
-  addText(inp, placeholder, FN, 14, C.fgSubtle, 16, 14);
-  return inp;
-}
-
-function waveformMock(parent, x, y, w, h, color, opacity) {
-  const g = figma.createFrame();
-  g.x = x; g.y = y;
-  g.resize(w, h);
-  g.fills = noFill();
-  parent.appendChild(g);
-  const barW = 3, gap = 2;
+// Waveform bars
+function waveform(f, x, y, w, h, color, peakPattern) {
+  const barW = 2;
+  const gap = 1;
   const count = Math.floor(w / (barW + gap));
   for (let i = 0; i < count; i++) {
     const t = i / count;
-    const peak = 0.15 + 0.75 * Math.abs(Math.sin(t * Math.PI * 9)) * (0.4 + 0.5 * Math.sin(t * Math.PI * 4));
-    const bh = Math.max(4, Math.round(h * peak));
-    const bar = figma.createRectangle();
-    bar.x = i * (barW + gap); bar.y = (h - bh) / 2;
-    bar.resize(barW, bh);
-    bar.fills = sf(color, opacity != null ? opacity : 0.75);
-    bar.cornerRadius = 2;
-    g.appendChild(bar);
+    const peak = peakPattern ? peakPattern(t) : (0.3 + 0.5 * Math.abs(Math.sin(i * 0.4 + 1) + 0.3 * Math.sin(i * 0.9)));
+    const bh = Math.max(3, Math.round(h * Math.min(1, peak)));
+    addRect(f, x + i * (barW + gap), y + h - bh, barW, bh, color || C.borderVisible, { radius: 1, opacity: 0.7 + peak * 0.3 });
   }
-  return g;
 }
 
-function scoreBarRow(parent, label, score, x, y, w) {
-  w = w || 342;
-  const trackW = w - 180;
-  addText(parent, label, FN, 13, C.fgMuted, x, y + 8);
-  addRect(parent, x + 134, y + 12, trackW, 8, C.borderSubtle, { radius: 4 });
-  const fillW = Math.max(4, Math.round(trackW * score / 100));
-  addRect(parent, x + 134, y + 12, fillW, 8, C.accentWarm, { radius: 4 });
-  addText(parent, String(score), FM, 16, C.fgPrimary, x + w - 36, y + 5);
-}
-
-function deltaBars(parent, rows, x, y) {
-  rows.forEach((row, i) => {
-    const ry = y + i * 40;
-    addText(parent, row.label, FN, 13, C.fgMuted, x, ry + 4);
-    addText(parent, String(row.r1), FM, 13, C.fgSubtle, x + 160, ry + 4);
-    addText(parent, "→", FN, 12, C.fgSubtle, x + 196, ry + 5);
-    addText(parent, String(row.r2), FM, 13, C.fgPrimary, x + 216, ry + 4);
-    const d = row.r2 - row.r1;
-    addText(parent, (d > 0 ? "+" : "") + d, FM, 13, d > 0 ? C.success : C.warning, x + 268, ry + 4);
+// Button
+function addButton(f, label, y, variant, w) {
+  const bw = w || W - 48;
+  const bx = 24;
+  const bg = variant === "secondary" ? null : C.accentWarm;
+  const textC = variant === "secondary" ? C.fgPrimary : C.bgPrimary;
+  addRect(f, bx, y, bw, 52, bg, {
+    radius: 12,
+    stroke: variant === "secondary" ? C.borderVisible : null,
+    sw: 1,
+    opacity: bg ? 1 : undefined
   });
+  addText(f, label, FNM, 15, textC, bx, y + 16, { w: bw, align: "CENTER" });
+  return y + 68;
 }
 
-function breathingDot(parent, cx, cy) {
-  addEllipse(parent, cx - 80, cy - 80, 160, 160, C.accentWarm, 0.07);
-  addEllipse(parent, cx - 60, cy - 60, 120, 120, C.accentWarm, 0.12);
-  addEllipse(parent, cx - 44, cy - 44, 88, 88, C.accentWarm, 1);
-  addEllipse(parent, cx - 28, cy - 28, 56, 56, { r: 0.941, g: 0.769, b: 0.388 }, 0.6);
+// Tag/badge
+function addTag(f, text, x, y, color) {
+  const bg = color || C.accentWarm;
+  addRect(f, x, y, text.length * 7 + 20, 24, bg, { radius: 12, opacity: 0.15 });
+  addText(f, text, FM, 10, bg, x + 10, y + 7, { ls: 6 });
 }
 
-// ─── SCREENS ─────────────────────────────────────────────────────────
+// Card
+function addCard(f, y, h) {
+  addRect(f, 16, y, W - 32, h, C.bgSecondary, { radius: 16, stroke: C.borderSubtle, sw: 1 });
+  return y;
+}
 
-function S01_Landing(col, row) {
-  const f = makeScreen("01 · Landing  /", col, row);
-  statusBar(f);
+// ─── SCREENS ──────────────────────────────────────────────────────────
+
+// 01 — Landing Page (full scroll)
+function screenLanding(col, row) {
+  const f = makeFrame("01 — Landing Page", 2800, col, row);
+
   // Nav
-  addText(f, "Storied", FSB, 18, C.fgPrimary, 24, 56);
-  addText(f, "Sign in", FN, 14, C.fgMuted, W - 70, 58);
-  // Hero
-  addText(f, "The daily practice\nof being a\nstoryteller.", FS, 36, C.fgPrimary, 24, 112, { w: 342, lh: 50 });
-  addText(f, "Ten minutes a day. Thirty practices.\nThe methods you know, finally practiced.", FN, 15, C.fgMuted, 24, 276, { w: 342, lh: 24 });
-  primaryBtn(f, "Begin your practice — $29", 40, 348, 310);
-  // Audio sample
-  divider(f, 434);
-  chip(f, "A 30-second sample", 24, 452);
-  const r1 = cardFrame(f, 24, 474, 342, 52, { radius: 10 });
-  addText(r1, "▶  Day 1 recording", FNM, 14, C.fgMuted, 16, 16);
-  addText(r1, "0:47", FM, 12, C.fgSubtle, 295, 18);
-  const r2 = cardFrame(f, 24, 536, 342, 52, { radius: 10 });
-  addText(r2, "▶  Day 30 recording", FNM, 14, C.accentWarm, 16, 16);
-  addText(r2, "1:22", FM, 12, C.fgSubtle, 295, 18);
-  addText(f, "Same person. 30 practices apart.", FS, 15, C.fgMuted, 24, 608, { w: 342, align: "CENTER" });
-  // Week timeline
-  divider(f, 648);
-  const weeks = ["Aristotle", "Pixar", "Campbell", "Cicero", "You"];
+  addRect(f, 0, 0, W, 60, C.bgPrimary);
+  addText(f, "s", FSI, 22, C.accentWarm, 22, 14);
+  addText(f, "Storied", FS, 16, C.fgPrimary, 46, 18);
+  addText(f, "Sign in", FN, 13, C.fgMuted, W - 70, 20);
+
+  // Hero — aurora BG hint
+  addRect(f, 0, 60, W, 600, null);
+  addRect(f, -40, 60, 320, 300, C.blue, { radius: 200, opacity: 0.06 });
+  addRect(f, 180, 400, 280, 280, C.accentWarm, { radius: 200, opacity: 0.04 });
+
+  // Hero copy
+  addText(f, "Founding storytellers — $29", FM, 11, C.fgSubtle, 24, 130, { w: W - 48, align: "CENTER", ls: 8 });
+  addText(f, "The daily practice\nof being a storyteller.", FSB, 34, C.accentWarm, 24, 170, { w: W - 48, align: "CENTER", lh: 40 });
+  addText(f, "Ten minutes a day. Thirty practices.\nThe methods you know, finally practiced.", FN, 15, C.fgMuted, 24, 286, { w: W - 48, align: "CENTER", lh: 24 });
+
+  addButton(f, "Begin your practice — $29", 350);
+
+  addText(f, "One-time payment. No subscription. No auto-charge.", FN, 11, C.fgSubtle, 24, 420, { w: W - 48, align: "CENTER" });
+
+  // Waveform
+  waveform(f, 48, 460, W - 96, 40, C.accentWarm, (t) => 0.3 + 0.5 * Math.abs(Math.sin(t * 20)));
+
+  // Divider
+  addRect(f, 24, 540, W - 48, 1, C.borderSubtle);
+
+  // Three columns section
+  addText(f, "What you build over 30 days", FS, 20, C.fgPrimary, 24, 570, { w: W - 48, align: "CENTER" });
+  const cols3 = [
+    ["The method", "Five frameworks.\nAristotle. Pixar.\nCampbell. Cicero.\nSynthesis."],
+    ["The practice", "Record. Hear feedback.\nRevise. Record again.\nHear the difference."],
+    ["The instinct", "After 30 days you stop thinking about structure. You just tell stories that land."],
+  ];
+  cols3.forEach((col3, i) => {
+    const cx = 24 + i * 116;
+    addText(f, col3[0], FSB, 13, C.accentWarm, cx, 620, { w: 108 });
+    addText(f, col3[1], FN, 11, C.fgMuted, cx, 642, { w: 108, lh: 17 });
+  });
+
+  // Methodology section
+  addRect(f, 24, 750, W - 48, 1, C.borderSubtle);
+  addText(f, "The curriculum", FM, 10, C.fgSubtle, 24, 770, { ls: 8 });
+  addText(f, "Five weeks. Five frameworks.\nOne practice each.", FS, 22, C.fgPrimary, 24, 798, { w: W - 48, lh: 30 });
+
+  const weeks = [
+    ["Week 1", "Aristotle's Poetics", "Structure & Conflict"],
+    ["Week 2", "Pixar's Story Spine", "The Modern Skeleton"],
+    ["Week 3", "Hero's Journey", "Personal Transformation"],
+    ["Week 4", "Cicero's Rhetoric", "Persuasion & Stake"],
+    ["Week 5", "Synthesis", "Finding Your Voice"],
+  ];
   weeks.forEach((w, i) => {
-    addText(f, "WK " + (i + 1), FM, 9, C.fgSubtle, 24 + i * 72, 664, { ls: 4 });
-    addText(f, w, FS, 12, C.fgMuted, 24 + i * 72, 680);
+    const wy = 870 + i * 76;
+    addRect(f, 16, wy, W - 32, 64, C.bgSecondary, { radius: 12, stroke: C.borderSubtle, sw: 1 });
+    addText(f, w[0], FM, 10, C.accentWarm, 30, wy + 12, { ls: 6 });
+    addText(f, w[1], FSB, 15, C.fgPrimary, 30, wy + 28);
+    addText(f, w[2], FN, 12, C.fgMuted, 30, wy + 46);
   });
-  secondaryBtn(f, "Read the full methodology →", 40, 724, 310);
-  return f;
-}
 
-function S02_Welcome(col, row) {
-  const f = makeScreen("02 · Welcome  /welcome", col, row);
-  statusBar(f);
-  addText(f, "Welcome.", FS, 44, C.fgPrimary, 40, 196);
-  addText(f, "Your practice begins now.", FN, 18, C.fgMuted, 40, 258, { w: 310, lh: 28 });
-  addText(f, "Create your account to continue.", FN, 14, C.fgSubtle, 40, 310);
-  // Google button
-  const gBtn = cardFrame(f, 40, 356, 310, 56, { radius: 12 });
-  addText(gBtn, "G", FNB, 14, C.bgPrimary, 18, 18);
-  addRect(gBtn, 14, 14, 28, 28, C.accentWarm, { radius: 14 });
-  addText(gBtn, "G", FNB, 14, C.bgPrimary, 21, 19);
-  addText(gBtn, "Continue with Google", FNM, 15, C.fgPrimary, 58, 18);
-  addText(f, "─── or ───", FN, 14, C.fgSubtle, 140, 432);
-  inputField(f, "your@email.com", 40, 460, 310);
-  primaryBtn(f, "Send magic link", 40, 528, 310);
-  addText(f, "No password. One step.", FN, 13, C.fgSubtle, 40, 604, { w: 310, align: "CENTER" });
-  return f;
-}
+  // Audio sample section
+  addRect(f, 24, 1260, W - 48, 1, C.borderSubtle);
+  addText(f, "Hear the difference", FS, 22, C.fgPrimary, 24, 1285, { w: W - 48 });
+  addText(f, "Day 1 vs. Day 30 — same person.", FN, 14, C.fgMuted, 24, 1320);
 
-function S03_Begin(col, row) {
-  const f = makeScreen("03 · Begin  /begin", col, row);
-  statusBar(f);
-  addText(f, "You've read the books.\nNow you do the work.", FS, 30, C.fgPrimary, 40, 180, { w: 310, lh: 46 });
-  addText(f, "Day 1 of 30.", FM, 13, C.fgMuted, 40, 286, { ls: 2 });
-  addText(f, "Week 1: Aristotle's\nStructure & Conflict.", FN, 16, C.fgMuted, 40, 308, { w: 310, lh: 26 });
-  addText(f, "Ten minutes. Begin when ready.", FN, 15, C.fgSubtle, 40, 362);
-  primaryBtn(f, "Begin Day 1", 40, 416, 310);
-  addText(f, "What to expect", FN, 14, C.fgSubtle, 148, 490);
-  addText(f, "⏱ 8–10 minutes", FN, 13, C.fgSubtle, 148, 524);
-  return f;
-}
+  addCard(f, 1356, 140);
+  addText(f, "Day 1 — First recording", FM, 10, C.fgSubtle, 32, 1372, { ls: 6 });
+  waveform(f, 32, 1396, W - 64, 28, C.borderVisible);
+  addRect(f, 32, 1396, 34, 34, null, { radius: 17, stroke: C.borderVisible, sw: 1 });
+  addText(f, "▶", FN, 12, C.fgMuted, 45, 1404);
 
-function S04_Dashboard(col, row) {
-  const f = makeScreen("04 · Dashboard  /dashboard", col, row);
-  const ny = navBar(f);
-  addText(f, "DAY 7 OF 30", FM, 11, C.fgSubtle, 40, ny + 24, { ls: 8 });
-  addText(f, "Week 2: Pixar's Story Spine", FN, 14, C.fgMuted, 40, ny + 44);
-  divider(f, ny + 74);
-  addText(f, "Today's practice\nis ready.", FS, 32, C.fgPrimary, 40, ny + 100, { w: 310, lh: 48 });
-  primaryBtn(f, "Begin Day 7  →", 40, ny + 230, 310);
-  divider(f, ny + 314);
-  addText(f, "Streak: 5 days", FM, 12, C.fgMuted, 40, ny + 330);
-  addText(f, "Started 12 days ago", FM, 11, C.fgSubtle, 40, ny + 352);
-  addText(f, "View archive", FN, 15, C.fgMuted, 40, ny + 410);
-  addText(f, "Settings", FN, 15, C.fgMuted, 40, ny + 442);
-  return f;
-}
+  addText(f, "Day 30 — Final recording", FM, 10, C.accentWarm, 32, 1444, { ls: 6 });
+  waveform(f, 32, 1468, W - 64, 28, C.accentWarm, (t) => 0.4 + 0.5 * Math.abs(Math.sin(t * 15 + 2)));
+  addRect(f, 32, 1468, 34, 34, null, { radius: 17, stroke: C.borderVisible, sw: 1 });
+  addText(f, "▶", FN, 12, C.fgMuted, 45, 1476);
 
-function S05_Question(col, row) {
-  const f = makeScreen("05 · Question  /daily/1/question", col, row);
-  statusBar(f);
-  addText(f, "Tell me about the most ordinary day in your life that turned into something unforgettable.", FS, 26, C.fgPrimary, 40, 190, { w: 310, lh: 42, align: "CENTER" });
-  addText(f, "60 seconds —\nbeginning, middle, end.", FN, 16, C.fgMuted, 40, 420, { w: 310, lh: 26, align: "CENTER" });
-  primaryBtn(f, "I'm ready", 90, 568, 210);
-  return f;
-}
-
-function S06_Teaching(col, row) {
-  const f = makeScreen("06 · Mini-Teaching  /daily/1/teaching", col, row);
-  statusBar(f);
-  chip(f, "Aristotle, 335 BC", 40, 126);
-  addText(f, '"Every story is made of three parts: a beginning, a middle, and an end."', FS, 22, C.fgPrimary, 40, 158, { w: 310, lh: 36 });
-  addText(f, "It sounds simple. But most people start in the middle and skip the end. Today: count all three.", FN, 15, C.fgMuted, 40, 344, { w: 310, lh: 24 });
-  primaryBtn(f, "Start recording", 40, 510, 310);
-  return f;
-}
-
-function S07_Record1(col, row) {
-  const f = makeScreen("07 · Recording  /daily/1/record-1", col, row);
-  statusBar(f);
-  addText(f, "00:53", FM, 72, C.fgPrimary, 48, 118, { w: 294, align: "CENTER" });
-  breathingDot(f, W / 2, 390);
-  waveformMock(f, 24, 514, W - 48, 56, C.accentWarm, 0.85);
-  secondaryBtn(f, "Stop", 140, 630, 110);
-  return f;
-}
-
-function S08_Processing(col, row) {
-  const f = makeScreen("08 · Processing  /daily/1/processing", col, row);
-  statusBar(f);
-  addText(f, "Listening...", FS, 28, C.fgPrimary, 40, 370, { w: 310, align: "CENTER" });
-  [0, 1, 2].forEach(i => {
-    addEllipse(f, 170 + i * 30, 432, 14, 14, i === 0 ? C.accentWarm : C.borderVisible);
-  });
-  return f;
-}
-
-function S09_Feedback(col, row) {
-  const f = makeScreen("09 · Feedback  /daily/1/feedback", col, row);
-  statusBar(f);
-
-  // Recording playback strip
-  chip(f, "Your First Recording", 24, 64);
-  waveformMock(f, 24, 84, 276, 38, C.fgMuted, 0.6);
-  addEllipse(f, 310, 88, 32, 32, C.bgTertiary);
-  addText(f, "▶", FN, 13, C.fgPrimary, 321, 97);
-  addText(f, "47 seconds", FM, 11, C.fgSubtle, 24, 132);
-
-  divider(f, 158);
-  chip(f, "Your Day 1 Baseline", 24, 174);
-
-  const scores = [
-    { n: "Clarity", v: 62 }, { n: "Structure", v: 41 }, { n: "Delivery", v: 58 },
-    { n: "Depth", v: 68 }, { n: "Impact", v: 54 }, { n: "Authenticity", v: 78 },
+  // Who is this for
+  addRect(f, 24, 1530, W - 48, 1, C.borderSubtle);
+  addText(f, "Who this is for", FS, 22, C.fgPrimary, 24, 1555, { w: W - 48 });
+  const who = [
+    "You've read the storytelling books. You haven't practiced yet.",
+    "You're a founder, manager, or coach. You know stories matter. You want a repeatable method.",
+    "You give talks, run meetings, lead teams. You want your stories to land.",
   ];
-  let sy = 200;
-  scores.forEach(s => { scoreBarRow(f, s.n, s.v, 24, sy); sy += 40; });
-
-  divider(f, sy + 4);
-  addText(f, "Overall", FN, 14, C.fgMuted, 24, sy + 16);
-  addText(f, "60", FM, 38, C.accentWarm, 276, sy + 8);
-  addText(f, "/100", FM, 18, C.fgSubtle, 318, sy + 20);
-
-  divider(f, sy + 68);
-  chip(f, "What I heard", 24, sy + 82);
-  addText(f, "You have a real story here — the kind that landed in your body, not just your head. That's why your Authenticity score is high.\n\nBut Aristotle would tell you: you started in the middle...", FS, 13, C.fgPrimary, 24, sy + 104, { w: 342, lh: 22 });
-
-  primaryBtn(f, "Continue to revise  →", 40, H - 88, 310);
-  return f;
-}
-
-function S10_Revise(col, row) {
-  const f = makeScreen("10 · Revision  /daily/1/revise", col, row);
-  statusBar(f);
-  chip(f, "Your Micro-Revision for Recording 2", 24, 78);
-  addText(f, "Start with one concrete detail — a smell, a time, a single word.", FS, 24, C.fgPrimary, 24, 110, { w: 342, lh: 38 });
-  addText(f, "Try something like:", FN, 14, C.fgMuted, 24, 232);
-  const examples = [
-    '"The coffee was still hot when I sat down."',
-    '"It was 9:47 on a Monday."',
-    '"I remember the rain."',
-  ];
-  let ey = 262;
-  examples.forEach(ex => {
-    const c = cardFrame(f, 24, ey, 342, 52, { radius: 10 });
-    addText(c, ex, FS, 13, C.fgPrimary, 16, 16, { w: 310 });
-    ey += 64;
+  who.forEach((line, i) => {
+    const wy = 1598 + i * 72;
+    addText(f, "—", FS, 18, C.accentWarm, 24, wy);
+    addText(f, line, FN, 14, C.fgMuted, 46, wy, { w: W - 70, lh: 22 });
   });
-  addText(f, "And give the ending one sentence that lands.\nWhat was different after?", FN, 14, C.fgMuted, 24, ey + 16, { w: 342, lh: 22 });
-  primaryBtn(f, "Record again", 40, H - 88, 310);
-  return f;
-}
 
-function S11_Record2(col, row) {
-  const f = makeScreen("11 · Recording 2  /daily/1/record-2", col, row);
-  statusBar(f);
-  addText(f, "Same question. Revised.", FN, 13, C.fgSubtle, 40, 68, { w: 310, align: "CENTER" });
-  addText(f, "01:02", FM, 72, C.accentWarm, 48, 130, { w: 294, align: "CENTER" });
-  breathingDot(f, W / 2, 390);
-  waveformMock(f, 24, 514, W - 48, 56, C.accentWarm, 0.9);
-  secondaryBtn(f, "Stop", 140, 630, 110);
-  return f;
-}
-
-function S12_Compare(col, row) {
-  const f = makeScreen("12 · Comparison  /daily/1/compare", col, row);
-  statusBar(f);
-  chip(f, "Recording 1 vs Recording 2", 24, 64);
-
-  addText(f, "R1 — 47s", FM, 11, C.fgSubtle, 24, 96);
-  const rr1 = cardFrame(f, 24, 112, 342, 48, { radius: 8 });
-  addEllipse(rr1, 8, 8, 32, 32, C.bgTertiary);
-  addText(rr1, "▶", FN, 12, C.fgPrimary, 19, 16);
-  waveformMock(rr1, 50, 10, 280, 28, C.fgMuted, 0.5);
-
-  addText(f, "R2 — 58s", FM, 11, C.accentWarm, 24, 172);
-  const rr2 = cardFrame(f, 24, 188, 342, 48, { radius: 8 });
-  addEllipse(rr2, 8, 8, 32, 32, C.accentWarm);
-  addText(rr2, "▶", FN, 12, C.bgPrimary, 19, 16);
-  waveformMock(rr2, 50, 10, 280, 28, C.accentWarm, 0.85);
-
-  divider(f, 254);
-  deltaBars(f, [
-    { label: "Clarity",     r1: 62, r2: 78 },
-    { label: "Structure",   r1: 41, r2: 82 },
-    { label: "Delivery",    r1: 58, r2: 71 },
-    { label: "Depth",       r1: 68, r2: 79 },
-    { label: "Impact",      r1: 54, r2: 84 },
-    { label: "Authenticity",r1: 78, r2: 81 },
-  ], 24, 268);
-
-  divider(f, 512);
-  addText(f, "OVERALL", FM, 10, C.fgSubtle, 24, 526, { ls: 6 });
-  addText(f, "60", FM, 32, C.fgSubtle, 24, 546);
-  addText(f, "→", FN, 20, C.fgSubtle, 72, 552);
-  addText(f, "79", FM, 32, C.fgPrimary, 100, 546);
-  addText(f, "▲ 19", FM, 24, C.success, 180, 550);
-  divider(f, 594);
-  primaryBtn(f, "Continue to Day 1 closure  →", 40, 610, 310);
-  return f;
-}
-
-function S13_Closure(col, row) {
-  const f = makeScreen("13 · Closure  /daily/1/closure", col, row);
-  statusBar(f);
-  chip(f, "Day 1 Complete", 24, 64);
-  addText(f, "You moved 19 points in 8 minutes. That's the kind of movement that compounds.", FS, 22, C.fgPrimary, 24, 98, { w: 342, lh: 36 });
-  divider(f, 230);
-  chip(f, "What Changed", 24, 248);
-  addText(f, "Your opening went from a date to a sensation. Your ending went from a fact to an image. Aristotle would approve.", FN, 14, C.fgMuted, 24, 272, { w: 342, lh: 22 });
-  divider(f, 370);
-  chip(f, "What to Carry Forward", 24, 388);
-  addText(f, "When you tell stories today — in meetings, in messages — start with one concrete detail. Not a summary. A sensation.", FN, 14, C.fgMuted, 24, 412, { w: 342, lh: 22 });
-  divider(f, 510);
-  addText(f, "Streak: 1 day", FM, 13, C.fgMuted, 24, 528);
-  addText(f, "Tomorrow: Day 2 — Conflict (human vs human)", FN, 13, C.fgSubtle, 24, 552, { w: 342 });
-  primaryBtn(f, "Save Day 1  →", 40, H - 88, 310);
-  return f;
-}
-
-function S14_WeekTransition(col, row) {
-  const f = makeScreen("14 · Week Transition  /weekly/1", col, row);
-  statusBar(f);
-  addText(f, "Week 1 complete.", FS, 34, C.fgPrimary, 24, 140, { w: 342 });
-  addText(f, "You spent six days with Aristotle.", FN, 16, C.fgMuted, 24, 196, { w: 342 });
-  divider(f, 244);
-  addText(f, "You learned the three parts of every story.\nYou found anagnorisis — the moment of recognition.\nYou named peripeteia — the turn.\nYou held conflict without resolving it too fast.", FN, 15, C.fgPrimary, 24, 264, { w: 342, lh: 28 });
-  divider(f, 420);
-  addText(f, "Next week, Pixar shows you how to take Aristotle's skeleton and make it modern.", FS, 18, C.fgMuted, 24, 444, { w: 342, lh: 30 });
-  addText(f, "The Story Spine.", FS, 24, C.fgPrimary, 24, 534);
-  primaryBtn(f, "Begin Week 2  →", 40, H - 88, 310);
-  return f;
-}
-
-function S15_Graduation(col, row) {
-  const f = makeScreen("15 · Graduation  /graduation", col, row);
-  statusBar(f);
-  addText(f, "Day 30.", FS, 48, C.accentWarm, 24, 134);
-  addText(f, "Thirty days ago, you told a story like this:", FN, 16, C.fgMuted, 24, 204, { w: 342, lh: 26 });
-  const d1card = cardFrame(f, 24, 250, 342, 56, { radius: 10 });
-  addText(d1card, "▶  Your Day 1 recording", FNM, 14, C.fgMuted, 16, 18);
-  addText(d1card, "0:47", FM, 12, C.fgSubtle, 295, 20);
-  addText(f, "Listen to it now. The whole thing.", FN, 15, C.fgSubtle, 24, 324, { w: 342 });
-  primaryBtn(f, "Continue when you've heard it  →", 40, 420, 310);
-  divider(f, 510);
-  chip(f, "Day 1 → Day 30", 24, 526);
-  deltaBars(f, [
-    { label: "Structure",  r1: 41, r2: 88 },
-    { label: "Impact",     r1: 54, r2: 91 },
-    { label: "Overall",    r1: 60, r2: 87 },
-  ], 24, 552);
-  addText(f, "▲ 27", FM, 28, C.success, 300, 630);
-  return f;
-}
-
-function S16_Archive(col, row) {
-  const f = makeScreen("16 · Archive  /archive", col, row);
-  const ny = navBar(f);
-  addText(f, "Your recordings", FS, 26, C.fgPrimary, 24, ny + 14);
-  addText(f, "Private. Yours. Always.", FN, 13, C.fgSubtle, 24, ny + 50);
-  divider(f, ny + 76);
-
-  const days = [
-    { d: 1, date: "May 1",  s: "60 → 79" },
-    { d: 2, date: "May 2",  s: "65 → 81" },
-    { d: 3, date: "May 4",  s: "64 → 78" },
-    { d: 4, date: "May 5",  s: "68 → 84" },
-    { d: 5, date: "May 7",  s: "61 → 77" },
+  // FAQ section
+  addRect(f, 24, 1820, W - 48, 1, C.borderSubtle);
+  addText(f, "Questions", FS, 22, C.fgPrimary, 24, 1845, { w: W - 48 });
+  const faqs = [
+    ["How long does each practice take?", "Eight to twelve minutes. The recording is two minutes. The feedback is instant. The second recording is two minutes. That's it."],
+    ["What if I miss a day?", "The practice waits. There is no streak pressure. You come back when you're ready."],
+    ["Is this AI-generated feedback?", "Yes. Claude reads your story, applies the day's framework, and gives you specific, honest feedback. Not encouragement. Analysis."],
   ];
-  let ay = ny + 76;
-  days.forEach(day => {
-    addText(f, "DAY " + day.d, FM, 10, C.fgSubtle, 24, ay + 10, { ls: 4 });
-    addText(f, day.date, FN, 12, C.fgSubtle, 24, ay + 30);
-    addText(f, "▶ R1   ▶ R2", FNM, 13, C.fgMuted, 110, ay + 22);
-    addText(f, day.s, FM, 12, C.accentWarm, 240, ay + 22);
-    addText(f, "View feedback →", FN, 11, C.fgSubtle, 240, ay + 40);
-    divider(f, ay + 63);
-    ay += 64;
+  let faqY = 1888;
+  faqs.forEach((faq) => {
+    addRect(f, 16, faqY, W - 32, 2, C.borderSubtle);
+    addText(f, faq[0], FSB, 14, C.fgPrimary, 24, faqY + 14, { w: W - 72, lh: 20 });
+    addText(f, "+", FN, 18, C.fgMuted, W - 40, faqY + 14);
+    addText(f, faq[1], FN, 13, C.fgMuted, 24, faqY + 46, { w: W - 48, lh: 20 });
+    faqY += 100;
   });
-  addText(f, "Export all recordings (ZIP)", FN, 14, C.fgMuted, 24, ay + 16);
-  addText(f, "Delete everything", FN, 14, C.warning, 24, ay + 44);
-  return f;
+
+  // Founding offer card
+  addRect(f, 24, 2190, W - 48, 1, C.borderSubtle);
+  addText(f, "Founding storytellers", FM, 10, C.fgSubtle, 24, 2210, { w: W - 48, align: "CENTER", ls: 8 });
+  addCard(f, 2238, 220);
+  addText(f, "$29 — for the first 50 customers.", FS, 22, C.fgPrimary, 32, 2256, { w: W - 64, lh: 30 });
+  addText(f, "After that, $39. After 200 customers, $49.\nThe practice is the same.", FN, 13, C.fgMuted, 32, 2308, { w: W - 64, lh: 20 });
+  addButton(f, "Begin your practice — $29", 2354);
+  addText(f, "One-time payment. No subscription. 30-day practice, yours forever.", FN, 11, C.fgSubtle, 32, 2424, { w: W - 64, align: "CENTER" });
+
+  // Email capture
+  addRect(f, 24, 2490, W - 48, 1, C.borderSubtle);
+  addText(f, "Not ready to start?", FN, 13, C.fgMuted, 24, 2510);
+  addText(f, "Leave your email.", FS, 20, C.fgPrimary, 24, 2532);
+  addText(f, "We'll send a free 7-day storytelling primer.", FN, 13, C.fgMuted, 24, 2562, { w: W - 48, lh: 20 });
+  addRect(f, 24, 2598, W - 48, 48, null, { radius: 10, stroke: C.borderVisible, sw: 1 });
+  addText(f, "your@email.com", FN, 14, C.fgSubtle, 36, 2612);
+  addButton(f, "Send the primer", 2660, "secondary");
+
+  // Footer
+  addRect(f, 24, 2740, W - 48, 1, C.borderSubtle);
+  addText(f, "Storied — Built in Dublin", FS, 14, C.fgMuted, 24, 2758);
+  addText(f, "hello@storied.app", FN, 12, C.fgSubtle, 24, 2778);
+  addText(f, "Methodology  Privacy  Refund  Contact", FN, 12, C.fgSubtle, 24, 2806);
 }
 
-function S17_Settings(col, row) {
-  const f = makeScreen("17 · Settings  /settings", col, row);
-  const ny = navBar(f);
-  addText(f, "Settings", FS, 28, C.fgPrimary, 24, ny + 14);
-  divider(f, ny + 56);
-  chip(f, "Account", 24, ny + 70);
-  addText(f, "Email: daniel@example.com", FN, 14, C.fgMuted, 24, ny + 92);
-  addText(f, "Joined: May 1, 2026", FN, 14, C.fgSubtle, 24, ny + 114);
-  divider(f, ny + 144);
-  chip(f, "Privacy", 24, ny + 158);
-  addText(f, "Your recordings are private. We never share them,\nnever use them to train AI.", FN, 13, C.fgSubtle, 24, ny + 180, { w: 342, lh: 20 });
-  addText(f, "Export my data", FN, 14, C.fgMuted, 24, ny + 238);
-  addText(f, "Delete my account", FN, 14, C.warning, 24, ny + 262);
-  divider(f, ny + 294);
-  chip(f, "Practice", 24, ny + 308);
-  addText(f, "Current day: 7 of 30", FN, 14, C.fgMuted, 24, ny + 330);
-  addText(f, "Streak: 5 days", FN, 14, C.fgMuted, 24, ny + 352);
-  divider(f, ny + 384);
-  addText(f, "Sign out", FN, 15, C.fgMuted, 24, ny + 400);
-  return f;
+// 02 — Welcome / Sign In
+function screenWelcome(col, row) {
+  const f = makeFrame("02 — Welcome / Sign In", 844, col, row);
+  addText(f, "Welcome.", FS, 38, C.fgPrimary, 24, 200, { w: W - 48, align: "CENTER" });
+  addText(f, "Your practice begins now.", FN, 16, C.fgMuted, 24, 256, { w: W - 48, align: "CENTER" });
+
+  addRect(f, 24, 350, W - 48, 52, null, { radius: 12, stroke: C.borderVisible, sw: 1 });
+  addText(f, "Continue with Google", FNM, 15, C.fgPrimary, 24, 366, { w: W - 48, align: "CENTER" });
+
+  addRect(f, W/2 - 60, 420, 52, 1, C.borderSubtle);
+  addText(f, "or", FN, 12, C.fgSubtle, W/2 - 10, 412);
+  addRect(f, W/2 + 8, 420, 52, 1, C.borderSubtle);
+
+  addRect(f, 24, 442, W - 48, 52, null, { radius: 12, stroke: C.borderVisible, sw: 1 });
+  addText(f, "your@email.com", FN, 14, C.fgSubtle, 36, 458);
+  addButton(f, "Send magic link", 510, "secondary");
+
+  addText(f, "We just need to set up your account. One step.", FN, 12, C.fgSubtle, 24, 588, { w: W - 48, align: "CENTER" });
 }
 
-// ─── SECTION LABEL ───────────────────────────────────────────────────
+// 03 — Magic Link Sent
+function screenMagicLinkSent(col, row) {
+  const f = makeFrame("03 — Magic Link Sent", 844, col, row);
+  addText(f, "Welcome.", FS, 38, C.fgPrimary, 24, 200, { w: W - 48, align: "CENTER" });
+  addText(f, "Your practice begins now.", FN, 16, C.fgMuted, 24, 256, { w: W - 48, align: "CENTER" });
+  addRect(f, 24, 340, W - 48, 1, C.borderSubtle);
+  addText(f, "Check your inbox.", FS, 22, C.fgPrimary, 24, 380, { w: W - 48, align: "CENTER" });
+  addText(f, "A sign-in link is on its way to\nyour@email.com.\nIt expires in 15 minutes.", FN, 14, C.fgMuted, 24, 422, { w: W - 48, align: "CENTER", lh: 24 });
+}
 
-function sectionLabel(page, text, col, row) {
-  const GAP = 48;
-  const t = figma.createText();
-  t.fontName = FNB;
-  t.characters = text;
-  t.fontSize = 12;
-  t.letterSpacing = { value: 6, unit: "PERCENT" };
-  t.fills = sf(C.accentWarm);
-  t.x = col * (W + GAP);
-  t.y = row * (H + GAP + 40) - 24;
-  page.appendChild(t);
+// 04 — Begin (Onboarding)
+function screenBegin(col, row) {
+  const f = makeFrame("04 — Begin — Day 1 Onboarding", 844, col, row);
+  addText(f, "Orkun, you've read the books.\nNow you do the work.", FS, 30, C.fgPrimary, 24, 200, { w: W - 48, align: "CENTER", lh: 38 });
+  addText(f, "Day 1 of 30", FM, 11, C.fgSubtle, 24, 300, { w: W - 48, align: "CENTER", ls: 8 });
+  addText(f, "Week 1: Aristotle's Structure and Conflict", FN, 13, C.fgMuted, 24, 322, { w: W - 48, align: "CENTER" });
+  addText(f, "Ten minutes. Begin when ready.", FN, 14, C.fgMuted, 24, 380, { w: W - 48, align: "CENTER" });
+  addButton(f, "Begin Day 1", 430);
+  addText(f, "What to expect", FN, 13, C.fgSubtle, 24, 510, { w: W - 48, align: "CENTER" });
+}
+
+// 05 — Dashboard — Ready
+function screenDashboardReady(col, row) {
+  const f = makeFrame("05 — Dashboard — Practice Ready", 844, col, row);
+  appHeader(f, false);
+  addText(f, "Good evening, Orkun", FN, 15, C.fgMuted, 24, 200, { w: W - 48, align: "CENTER" });
+  addText(f, "Day 3 of 30", FM, 11, C.fgSubtle, 24, 240, { w: W - 48, align: "CENTER", ls: 8 });
+  addText(f, "Week 1: Structure & Conflict", FN, 13, C.fgMuted, 24, 262, { w: W - 48, align: "CENTER" });
+  addRect(f, 48, 300, W - 96, 1, C.borderSubtle);
+  addText(f, "Today's practice is ready.", FS, 28, C.fgPrimary, 24, 340, { w: W - 48, align: "CENTER" });
+  addButton(f, "Begin Day 3", 400);
+  addRect(f, 48, 560, W - 96, 1, C.borderSubtle);
+  addText(f, "Streak: 3 days", FM, 12, C.fgMuted, 24, 580, { w: W - 48, align: "CENTER" });
+  addText(f, "Started 2 days ago", FM, 12, C.fgSubtle, 24, 602, { w: W - 48, align: "CENTER" });
+}
+
+// 06 — Dashboard — Day Complete
+function screenDashboardComplete(col, row) {
+  const f = makeFrame("06 — Dashboard — Day Complete", 844, col, row);
+  appHeader(f, false);
+  addText(f, "Good evening, Orkun", FN, 15, C.fgMuted, 24, 200, { w: W - 48, align: "CENTER" });
+  addText(f, "Day 4 of 30", FM, 11, C.fgSubtle, 24, 240, { w: W - 48, align: "CENTER", ls: 8 });
+  addText(f, "Week 1: Structure & Conflict", FN, 13, C.fgMuted, 24, 262, { w: W - 48, align: "CENTER" });
+  addRect(f, 48, 300, W - 96, 1, C.borderSubtle);
+  addText(f, "Day 4 is ready.", FS, 28, C.fgPrimary, 24, 340, { w: W - 48, align: "CENTER" });
+  addButton(f, "Begin Day 4", 400);
+  addRect(f, 48, 560, W - 96, 1, C.borderSubtle);
+  addText(f, "Streak: 3 days", FM, 12, C.fgMuted, 24, 580, { w: W - 48, align: "CENTER" });
+}
+
+// 07 — Daily — Question Intro
+function screenDailyQuestion(col, row) {
+  const f = makeFrame("07 — Daily — Question Intro", 844, col, row);
+  appHeader(f, true);
+  addText(f, "Day 1  ·  Week 1", FM, 11, C.fgSubtle, 24, 90, { w: W - 48, align: "CENTER", ls: 6 });
+  addText(f, "Ordinary day, unforgettable turn.", FS, 22, C.fgPrimary, 24, 130, { w: W - 48, align: "CENTER", lh: 30 });
+  addRect(f, 48, 200, W - 96, 1, C.borderSubtle);
+  addText(f, "Today's question", FM, 10, C.fgSubtle, 24, 220, { ls: 8 });
+  addText(f, "Tell me about the most ordinary day in your life that turned into something unforgettable. Two minutes — beginning, middle, end.", FS, 18, C.fgPrimary, 24, 252, { w: W - 48, lh: 28 });
+  addButton(f, "Read the method", 440);
+  addText(f, "Skip to recording", FN, 14, C.fgMuted, 24, 520, { w: W - 48, align: "CENTER" });
+}
+
+// 08 — Daily — Teaching (Mini-teaching)
+function screenTeaching(col, row) {
+  const f = makeFrame("08 — Daily — Teaching / Method", 844, col, row);
+  appHeader(f, true);
+  addText(f, "ARISTOTLE'S POETICS", FM, 10, C.fgSubtle, 24, 90, { ls: 8 });
+  addText(f, "Aristotle said it 2,300 years ago: \"Every story is made of three parts — a beginning, a middle, and an end.\"\n\nIt sounds simple. But most people start in the middle, blur through the action, and skip the end.\n\nToday: count all three.", FS, 17, C.fgPrimary, 24, 130, { w: W - 48, lh: 28 });
+  addButton(f, "Start recording", 480);
+}
+
+// 09 — Recording 1
+function screenRecord1(col, row) {
+  const f = makeFrame("09 — Recording 1 — In Progress", 844, col, row);
+  appHeader(f, true);
+  addText(f, "1:24", FS, 72, C.fgPrimary, 0, 160, { w: W, align: "CENTER" });
+  // Timer ring
+  const cx = W / 2, cy = 360;
+  addRect(f, cx - 80, cy - 80, 160, 160, null, { radius: 80, stroke: C.borderSubtle, sw: 2 });
+  addRect(f, cx - 80, cy - 80, 160, 160, null, { radius: 80, stroke: C.accentWarm, sw: 2, opacity: 0.4 });
+  // Breathing dot
+  addRect(f, cx - 8, cy - 8, 16, 16, C.accentWarm, { radius: 8 });
+  // Waveform
+  waveform(f, 48, 480, W - 96, 36, C.accentWarm, (t) => 0.2 + 0.7 * Math.abs(Math.sin(t * 18)));
+  addButton(f, "Stop", 540, "secondary", 120);
+}
+
+// 10 — Processing (Reading your story...)
+function screenProcessing(col, row) {
+  const f = makeFrame("10 — Processing — Reading Story", 844, col, row);
+  appHeader(f, true);
+  // Loading animation dots
+  addText(f, "Reading your story", FS, 22, C.fgPrimary, 24, 360, { w: W - 48, align: "CENTER" });
+  addText(f, "Applying Aristotle's framework.", FN, 14, C.fgMuted, 24, 400, { w: W - 48, align: "CENTER" });
+  // Dots
+  [0, 1, 2].forEach((i) => {
+    addRect(f, W/2 - 20 + i * 20, 448, 8, 8, C.accentWarm, { radius: 4, opacity: 0.3 + i * 0.35 });
+  });
+}
+
+// 11 — Feedback Page (full scroll)
+function screenFeedback(col, row) {
+  const f = makeFrame("11 — Feedback — Day 1", 1600, col, row);
+  appHeader(f, true);
+
+  // Your first recording
+  monoLabel(f, "YOUR FIRST RECORDING", 70);
+  // Waveform player
+  addRect(f, 24, 92, 40, 40, null, { radius: 20, stroke: C.borderVisible, sw: 1 });
+  addText(f, "▶", FN, 14, C.fgMuted, 36, 104);
+  waveform(f, 76, 100, W - 100, 28, C.borderVisible);
+
+  divider(f, 148);
+
+  // Scores
+  monoLabel(f, "YOUR DAY 1 BASELINE", 170, C.accentWarm);
+  let scoreY = 200;
+  const scores = [["Clarity",58],["Structure",45],["Delivery",50],["Depth",38],["Impact",35],["Authenticity",42]];
+  scores.forEach(([n,v]) => { scoreY = scoreBar(f, n, v, scoreY); });
+
+  // Overall
+  addRect(f, 24, scoreY, W - 48, 1, C.borderSubtle);
+  addText(f, "Overall", FN, 15, C.fgMuted, 24, scoreY + 16);
+  addText(f, "45/100", FM, 38, C.accentWarm, 24, scoreY + 10, { w: W - 48, align: "RIGHT" });
+  scoreY += 76;
+
+  divider(f, scoreY);
+  scoreY += 24;
+
+  // Narrative
+  monoLabel(f, "FEEDBACK", scoreY);
+  scoreY += 26;
+  addText(f, "Orkun, the bones of this story are here — a setting, a moment, something that mattered. But right now it reads as a summary. You told me what happened. The story happens when you show me the exact moment things shifted.\n\nYou named the day but didn't render it. I can't see the table, hear the conversation, feel the weight. Where's the specific detail — the sentence that was said, the thing that was in your hands, the exact beat where the ordinary became unforgettable?\n\nRecord again. Open on the sensory detail. Don't summarise. Begin inside the moment.", FS, 15, C.fgPrimary, 24, scoreY, { w: W - 48, lh: 24 });
+  scoreY += 340;
+
+  divider(f, scoreY);
+  scoreY += 24;
+
+  // Revision preview
+  monoLabel(f, "YOUR MICRO-REVISION", scoreY, C.accentWarm);
+  scoreY += 28;
+  addText(f, "Start with the exact sensory detail. Not what happened — where you were, what you could see.\n\nTry something like:\n\n• The coffee was still hot when I sat down.\n• It was 9:47 on a Monday.\n• I remember the rain.", FS, 15, C.fgPrimary, 24, scoreY, { w: W - 48, lh: 24 });
+  scoreY += 220;
+
+  addButton(f, "See full analysis + record again", scoreY);
+}
+
+// 12 — Revise — Micro-revision Tab
+function screenRevise(col, row) {
+  const f = makeFrame("12 — Revise — Micro-revision", 1200, col, row);
+  appHeader(f, true);
+
+  addText(f, "BEFORE RECORDING 2", FM, 10, C.accentWarm, 24, 70, { ls: 8 });
+
+  // Tabs
+  addText(f, "Micro-revision", FNM, 14, C.fgPrimary, 24, 110);
+  addRect(f, 24, 130, 104, 2, C.accentWarm);
+  addText(f, "How it could be told", FN, 14, C.fgMuted, 148, 110);
+
+  addRect(f, 0, 138, W, 1, C.borderSubtle);
+
+  // Revision prompt
+  addText(f, "Start with the exact sensory detail. Not what happened — where you were, what you could see.\n\nTry something like:\n\n• The coffee was still hot when I sat down.\n• It was 9:47 on a Monday.\n• I remember the rain.\n\nOpen on that one detail. The story follows.", FS, 17, C.fgPrimary, 24, 164, { w: W - 48, lh: 28 });
+
+  addRect(f, 24, 478, W - 48, 1, C.borderSubtle);
+
+  // Structure breakdown
+  addText(f, "ARISTOTLE'S FRAMEWORK", FM, 10, C.fgSubtle, 24, 504, { ls: 8 });
+
+  const elements = [
+    ["Beginning", "present", "Present but thin — opened with setting summary rather than a concrete scene."],
+    ["Inciting Incident", "weak", "The turn was named but not shown. We need the exact moment."],
+    ["Conflict", "missing", "Internal vs. external tension was absent. What were the two forces?"],
+    ["Recognition", "missing", "The realisation wasn't articulated. When did you see it?"],
+  ];
+  let elY = 534;
+  elements.forEach(([name, status, note]) => {
+    const statusC = status === "present" ? C.success : status === "weak" ? C.warning : C.fgSubtle;
+    addRect(f, 16, elY, W - 32, 88, C.bgSecondary, { radius: 10, stroke: C.borderSubtle, sw: 1 });
+    addText(f, name, FNM, 13, C.fgPrimary, 28, elY + 12);
+    addTag(f, status, 28, elY + 36, statusC);
+    addText(f, note, FN, 12, C.fgMuted, 28, elY + 60, { w: W - 56, lh: 18 });
+    elY += 104;
+  });
+
+  addButton(f, "Record again", elY + 20);
+}
+
+// 13 — Revise — How It Could Be Told (Annotated Exemplar)
+function screenExemplar(col, row) {
+  const f = makeFrame("13 — Revise — How It Could Be Told", 1400, col, row);
+  appHeader(f, true);
+
+  addText(f, "BEFORE RECORDING 2", FM, 10, C.accentWarm, 24, 70, { ls: 8 });
+
+  // Tabs
+  addText(f, "Micro-revision", FN, 14, C.fgMuted, 24, 110);
+  addText(f, "How it could be told", FNM, 14, C.fgPrimary, 148, 110);
+  addRect(f, 148, 130, 140, 2, C.accentWarm);
+  addRect(f, 0, 138, W, 1, C.borderSubtle);
+
+  // Framework name + instruction
+  addText(f, "ARISTOTLE'S POETICS", FM, 10, C.fgSubtle, 24, 158, { ls: 8 });
+  addText(f, "Tap an element in the legend to highlight it in the story.", FN, 12, C.fgSubtle, 24, 178);
+
+  // Legend chips
+  const legendItems = [
+    ["Beginning", C.amber], ["Inciting Incident", C.blue], ["Conflict", C.green],
+    ["Recognition", C.purple], ["Reversal", C.coral], ["Emotional Release", C.teal],
+  ];
+  let lx = 24, ly = 208;
+  legendItems.forEach(([label, color]) => {
+    const chipW = label.length * 7 + 28;
+    if (lx + chipW > W - 24) { lx = 24; ly += 32; }
+    addRect(f, lx, ly, chipW, 26, color, { radius: 13, opacity: 0.15 });
+    addRect(f, lx + 8, ly + 9, 8, 8, color, { radius: 4 });
+    addText(f, label, FM, 10, color, lx + 20, ly + 8);
+    lx += chipW + 8;
+  });
+
+  ly += 54;
+  addRect(f, 24, ly, W - 48, 1, C.borderSubtle);
+  ly += 20;
+
+  // Annotated story segments
+  const segments = [
+    ["It was a Tuesday. I know because Tuesdays were always the same — coffee at 7:15, the same train, the same headphones, the same playlist.", C.amber, "Beginning"],
+    [" The message arrived at 9:47, while I was in a meeting about Q3 projections. One line. My father's number.", C.blue, "Inciting Incident"],
+    [" Two parts of me collided instantly: the professional who couldn't leave, and the son who knew this call didn't happen on ordinary days.", C.green, "Conflict"],
+    [" I stepped out. The corridor was empty. I stood there realising I had been treating every Tuesday like it was guaranteed.", C.purple, "Recognition"],
+    [" Everything about that morning — the coffee, the train, the meeting — had been pointing at something I refused to see.", C.coral, "Reversal"],
+    [" He was fine. A small scare. But I haven't listened to that playlist since.", C.teal, "Emotional Release"],
+  ];
+
+  let segY = ly;
+  segments.forEach(([text, color, label]) => {
+    const height = Math.ceil(text.length / 52) * 20 + 36;
+    addRect(f, 16, segY, W - 32, height, color, { radius: 8, opacity: 0.1 });
+    addRect(f, 16, segY, 3, height, color, { radius: 1 });
+    addText(f, label, FM, 10, color, 26, segY + 8, { ls: 5 });
+    addText(f, text.trim(), FS, 14, C.fgPrimary, 26, segY + 24, { w: W - 52, lh: 22 });
+    segY += height + 10;
+  });
+
+  addRect(f, 24, segY + 10, W - 48, 1, C.borderSubtle);
+  addText(f, "Your story, retold through the framework. Use it as a reference — not a script.", FN, 12, C.fgSubtle, 24, segY + 22, { w: W - 48, lh: 18 });
+
+  addButton(f, "Record again", segY + 70);
+}
+
+// 14 — Recording 2
+function screenRecord2(col, row) {
+  const f = makeFrame("14 — Recording 2 — Revised", 844, col, row);
+  appHeader(f, true);
+  addText(f, "SAME QUESTION. REVISED.", FM, 10, C.fgSubtle, 24, 80, { w: W - 48, align: "CENTER", ls: 8 });
+  addText(f, "0:48", FS, 72, C.fgPrimary, 0, 160, { w: W, align: "CENTER" });
+  const cx = W / 2, cy = 360;
+  addRect(f, cx - 80, cy - 80, 160, 160, null, { radius: 80, stroke: C.borderSubtle, sw: 2 });
+  addRect(f, cx - 80, cy - 80, 160, 160, null, { radius: 80, stroke: C.accentWarm, sw: 2, opacity: 0.7 });
+  addRect(f, cx - 8, cy - 8, 16, 16, C.accentWarm, { radius: 8 });
+  waveform(f, 48, 480, W - 96, 36, C.accentWarm, (t) => 0.3 + 0.65 * Math.abs(Math.sin(t * 14 + 1)));
+  addButton(f, "Stop", 540, "secondary", 120);
+}
+
+// 15 — Compare (R1 vs R2)
+function screenCompare(col, row) {
+  const f = makeFrame("15 — Compare — R1 vs R2", 1400, col, row);
+  appHeader(f, true);
+
+  addText(f, "RECORDING 1 VS RECORDING 2", FM, 10, C.accentWarm, 24, 70, { w: W - 48, align: "CENTER", ls: 8 });
+
+  // R1 waveform
+  monoLabel(f, "R1 — 2m 04s", 110);
+  addRect(f, 24, 130, 40, 40, null, { radius: 20, stroke: C.borderVisible, sw: 1 });
+  addText(f, "▶", FN, 14, C.fgMuted, 36, 142);
+  waveform(f, 76, 138, W - 100, 28, C.borderVisible);
+
+  // R2 waveform
+  monoLabel(f, "R2 — 2m 18s", 190);
+  addRect(f, 24, 210, 40, 40, null, { radius: 20, stroke: C.accentWarm, sw: 1 });
+  addText(f, "▶", FN, 14, C.accentWarm, 36, 222);
+  waveform(f, 76, 218, W - 100, 28, C.accentWarm, (t) => 0.35 + 0.6 * Math.abs(Math.sin(t * 12 + 2)));
+
+  divider(f, 268);
+
+  // Score delta table
+  const metrics = [["Clarity",58,68],["Structure",45,62],["Delivery",50,58],["Depth",38,50],["Impact",35,52],["Authenticity",42,55]];
+  addText(f, "", FM, 11, C.fgSubtle, 24, 286);
+  addText(f, "R1", FM, 12, C.fgSubtle, W - 100, 286, { w: 30, align: "RIGHT" });
+  addText(f, "R2", FM, 12, C.fgSubtle, W - 66, 286, { w: 30, align: "RIGHT" });
+  addText(f, "Δ",  FM, 12, C.fgSubtle, W - 32, 286, { w: 24, align: "RIGHT" });
+  let mY = 310;
+  metrics.forEach(([name, r1, r2]) => {
+    const delta = r2 - r1;
+    addText(f, name, FN, 13, C.fgMuted, 24, mY);
+    addText(f, String(r1), FM, 13, C.fgSubtle, W - 100, mY, { w: 30, align: "RIGHT" });
+    addText(f, String(r2), FM, 13, C.fgPrimary, W - 66, mY, { w: 30, align: "RIGHT" });
+    addText(f, "+" + delta, FM, 13, C.success, W - 32, mY, { w: 24, align: "RIGHT" });
+    mY += 28;
+  });
+
+  divider(f, mY + 8);
+
+  // Overall
+  addText(f, "OVERALL", FM, 10, C.fgMuted, 24, mY + 28, { w: W - 48, align: "CENTER", ls: 8 });
+  addText(f, "45  →  57", FM, 42, C.fgPrimary, 24, mY + 52, { w: W - 48, align: "CENTER" });
+  addText(f, "▲ 12", FM, 24, C.success, 24, mY + 104, { w: W - 48, align: "CENTER" });
+
+  divider(f, mY + 148);
+
+  // Closure narrative
+  const narY = mY + 172;
+  addText(f, "The second recording found the scene. You opened inside the moment — the table, the time, the message — and the story held its shape. That's Aristotle working. The beginning was solid; the inciting incident was rendered, not named. Keep that discipline.", FS, 15, C.fgPrimary, 24, narY, { w: W - 48, lh: 24 });
+
+  addRect(f, 24, narY + 160, W - 48, 1, C.borderSubtle);
+  addText(f, "WHAT TO CARRY FORWARD", FM, 10, C.fgSubtle, 24, narY + 184, { ls: 8 });
+  addText(f, "When you tell stories today — start with one concrete detail. Not a summary. A sensation.", FS, 15, C.fgPrimary, 24, narY + 210, { w: W - 48, lh: 24 });
+
+  addRect(f, 24, narY + 280, W - 48, 1, C.borderSubtle);
+  addText(f, "TOMORROW", FM, 10, C.fgSubtle, 24, narY + 304, { ls: 8 });
+  addText(f, "Day 2 — A disagreement you held your ground in.", FN, 13, C.fgMuted, 24, narY + 326, { w: W - 48 });
+
+  addButton(f, "Finish Day 1", narY + 370);
+}
+
+// 16 — Closure
+function screenClosure(col, row) {
+  const f = makeFrame("16 — Closure — Day 1 Summary", 1100, col, row);
+  appHeader(f, false);
+
+  addText(f, "DAY 1 COMPLETE", FM, 10, C.fgSubtle, 24, 80, { w: W - 48, align: "CENTER", ls: 8 });
+  addText(f, "You moved 12 points\nin 4 minutes.", FS, 30, C.fgPrimary, 24, 120, { w: W - 48, align: "CENTER", lh: 38 });
+  addText(f, "That is the kind of movement that compounds.", FN, 14, C.fgMuted, 24, 198, { w: W - 48, align: "CENTER" });
+
+  divider(f, 240);
+
+  addText(f, "WHAT CHANGED", FM, 10, C.fgSubtle, 24, 264, { ls: 8 });
+  addText(f, "The second recording found the scene. You opened inside the moment and the story held its shape.", FS, 15, C.fgPrimary, 24, 292, { w: W - 48, lh: 24 });
+
+  divider(f, 360);
+
+  addText(f, "WHAT TO CARRY FORWARD", FM, 10, C.fgSubtle, 24, 384, { ls: 8 });
+  addText(f, "When you tell stories today — start with one concrete detail. Not a summary. A sensation.", FS, 15, C.fgPrimary, 24, 412, { w: W - 48, lh: 24 });
+
+  divider(f, 480);
+
+  // Stats
+  addText(f, "Streak", FN, 13, C.fgMuted, 24, 504);
+  addText(f, "1 day", FM, 13, C.fgPrimary, 24, 504, { w: W - 48, align: "RIGHT" });
+  addText(f, "Tomorrow", FN, 13, C.fgMuted, 24, 532);
+  addText(f, "Day 2 — A disagreement you held your ground in.", FN, 13, C.fgSubtle, 140, 532, { w: W - 164 });
+
+  addButton(f, "Save Day 1", 590);
+}
+
+// 17 — Archive
+function screenArchive(col, row) {
+  const f = makeFrame("17 — Archive — Your Recordings", 900, col, row);
+  appHeader(f, false);
+
+  addText(f, "Your recordings", FS, 22, C.fgPrimary, 24, 70);
+  addText(f, "Private. Yours. Always.", FN, 13, C.fgSubtle, 24, 100);
+
+  const days = [[1,"58","72"],[2,"52","65"],[3,"61","74"]];
+  let cardY = 140;
+  days.forEach(([day, r1, r2]) => {
+    addRect(f, 16, cardY, W - 32, 72, C.bgSecondary, { radius: 14, stroke: C.borderSubtle, sw: 1 });
+    addText(f, "Day " + day, FM, 11, C.fgSubtle, 28, cardY + 14, { ls: 6 });
+    addText(f, "R1: " + r1 + "  →  R2: " + r2, FM, 14, C.fgMuted, 28, cardY + 36);
+    addText(f, "View feedback", FN, 13, C.accentWarm, W - 120, cardY + 26, { decoration: "UNDERLINE" });
+    cardY += 88;
+  });
+
+  divider(f, cardY + 16);
+  addText(f, "Export all recordings (ZIP)", FN, 13, C.fgMuted, 24, cardY + 36, { decoration: "UNDERLINE" });
+  addText(f, "Delete everything", FN, 13, C.error, 24, cardY + 68, { opacity: 0.8 });
+}
+
+// 18 — Settings
+function screenSettings(col, row) {
+  const f = makeFrame("18 — Settings", 700, col, row);
+  appHeader(f, false);
+
+  addText(f, "Settings", FS, 22, C.fgPrimary, 24, 70);
+
+  // Email
+  addText(f, "ACCOUNT", FM, 10, C.fgSubtle, 24, 120, { ls: 8 });
+  addRect(f, 16, 148, W - 32, 60, C.bgSecondary, { radius: 12, stroke: C.borderSubtle, sw: 1 });
+  addText(f, "Email", FN, 14, C.fgMuted, 28, 162);
+  addText(f, "orkun@example.com", FN, 14, C.fgSubtle, 28, 182);
+
+  // Stats
+  addText(f, "PROGRESS", FM, 10, C.fgSubtle, 24, 230, { ls: 8 });
+  addRect(f, 16, 258, W - 32, 90, C.bgSecondary, { radius: 12, stroke: C.borderSubtle, sw: 1 });
+  [["Days completed","3 of 30"],["Streak","3 days"],["Started","2 days ago"]].forEach(([k,v], i) => {
+    addText(f, k, FN, 13, C.fgMuted, 28, 270 + i * 26);
+    addText(f, v, FM, 13, C.fgPrimary, 28, 270 + i * 26, { w: W - 56, align: "RIGHT" });
+  });
+
+  // Danger
+  addText(f, "DANGER ZONE", FM, 10, C.error, 24, 380, { ls: 8, opacity: 0.7 });
+  addButton(f, "Delete all my data", 408, "secondary");
+  addText(f, "This cannot be undone. Your recordings and progress will be permanently deleted.", FN, 12, C.fgSubtle, 24, 476, { w: W - 48, lh: 18 });
+}
+
+// 19 — Graduation
+function screenGraduation(col, row) {
+  const f = makeFrame("19 — Graduation — Day 30 Complete", 1200, col, row);
+  appHeader(f, false);
+
+  addText(f, "DAY 30", FM, 11, C.accentWarm, 24, 80, { w: W - 48, align: "CENTER", ls: 10 });
+  addText(f, "You did the work.", FS, 32, C.fgPrimary, 24, 120, { w: W - 48, align: "CENTER", lh: 40 });
+  addText(f, "Thirty days. Sixty recordings.\nFive frameworks. One voice.", FN, 16, C.fgMuted, 24, 172, { w: W - 48, align: "CENTER", lh: 26 });
+
+  divider(f, 226);
+
+  addText(f, "YOUR JOURNEY", FM, 10, C.fgSubtle, 24, 252, { ls: 8 });
+  addText(f, "Day 1 score: 45  →  Day 30 score: 82\nA 37-point arc, built one practice at a time.", FS, 17, C.fgPrimary, 24, 280, { w: W - 48, lh: 28 });
+
+  divider(f, 348);
+
+  addText(f, "WHAT CHANGED MOST", FM, 10, C.fgSubtle, 24, 374, { ls: 8 });
+  addText(f, "Structure. You started every story from the middle. Now you find the beginning — the specific moment before the change — and you hold it long enough for the listener to feel it.", FS, 15, C.fgPrimary, 24, 400, { w: W - 48, lh: 24 });
+
+  divider(f, 476);
+
+  addText(f, "WHAT STAYED STRONGEST", FM, 10, C.fgSubtle, 24, 500, { ls: 8 });
+  addText(f, "Authenticity. Even on Day 1, your voice was yours. The frameworks sharpened it — they didn't replace it. That's the hardest thing to keep. You kept it.", FS, 15, C.fgPrimary, 24, 526, { w: W - 48, lh: 24 });
+
+  divider(f, 600);
+
+  addText(f, "CARRY THIS FORWARD", FM, 10, C.fgSubtle, 24, 624, { ls: 8 });
+  addText(f, "Open on the sensory detail. Find the hinge. Name the two voices. Lead with stake. These are not rules — they are reflexes now. Use them.", FS, 15, C.fgPrimary, 24, 650, { w: W - 48, lh: 24 });
+
+  addButton(f, "View your full archive", 730);
+  addText(f, "Share your story", FN, 14, C.fgMuted, 24, 810, { w: W - 48, align: "CENTER" });
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────
-
-async function main() {
-  // Load all needed fonts
-  const fontDefs = [
-    { family: "Lora",           style: "Regular",  fallbacks: [["Playfair Display","Regular"],["Georgia","Regular"],["Inter","Regular"]]  },
-    { family: "Lora",           style: "Bold",      fallbacks: [["Playfair Display","Bold"],["Georgia","Bold"],["Inter","Bold"]]  },
-    { family: "Inter",          style: "Regular",   fallbacks: [] },
-    { family: "Inter",          style: "Medium",    fallbacks: [["Inter","Regular"]] },
-    { family: "Inter",          style: "SemiBold",  fallbacks: [["Inter","Bold"],["Inter","Regular"]] },
-    { family: "JetBrains Mono", style: "Regular",   fallbacks: [["Roboto Mono","Regular"],["Courier New","Regular"],["Inter","Regular"]] },
+async function run() {
+  // Load fonts
+  const fonts = [
+    { family: "Lora", style: "Regular" },
+    { family: "Lora", style: "Italic" },
+    { family: "Lora", style: "Bold" },
+    { family: "Inter", style: "Regular" },
+    { family: "Inter", style: "Medium" },
+    { family: "Inter", style: "Bold" },
+    { family: "JetBrains Mono", style: "Regular" },
+    { family: "JetBrains Mono", style: "Medium" },
   ];
 
-  async function loadFont(family, style) {
-    const fn = { family, style };
-    await figma.loadFontAsync(fn);
-    return fn;
-  }
-
-  async function loadWithFallback(def) {
-    try { return await loadFont(def.family, def.style); }
-    catch (e) {
-      for (const [fb, fbs] of def.fallbacks) {
-        try { return await loadFont(fb, fbs); }
-        catch (e2) { /* try next */ }
-      }
-      return await loadFont("Inter", "Regular"); // ultimate fallback
+  for (const font of fonts) {
+    try { await figma.loadFontAsync(font); } catch {
+      try { await figma.loadFontAsync({ family: "Inter", style: font.style }); } catch {}
     }
   }
 
-  const loaded = await Promise.all(fontDefs.map(loadWithFallback));
-  [FS, FSB, FN, FNM, FNB, FM] = loaded;
+  try { FS  = { family: "Lora", style: "Regular" };  await figma.loadFontAsync(FS);  } catch { FS  = { family: "Inter", style: "Regular" }; }
+  try { FSI = { family: "Lora", style: "Italic" };   await figma.loadFontAsync(FSI); } catch { FSI = { family: "Inter", style: "Regular" }; }
+  try { FSB = { family: "Lora", style: "Bold" };     await figma.loadFontAsync(FSB); } catch { FSB = { family: "Inter", style: "Bold" }; }
+  FN  = { family: "Inter", style: "Regular" };
+  FNM = { family: "Inter", style: "Medium" };
+  FNB = { family: "Inter", style: "Bold" };
+  try { FM  = { family: "JetBrains Mono", style: "Regular" }; await figma.loadFontAsync(FM); } catch { FM = FN; }
+  try { FMB = { family: "JetBrains Mono", style: "Medium" };  await figma.loadFontAsync(FMB); } catch { FMB = FM; }
 
-  const page = figma.currentPage;
-  page.name = "Storied — Screen Designs";
+  // Layout: 4 columns × 5 rows
+  // Row 0: Marketing
+  screenLanding(0, 0);
 
-  // Delete existing content
-  while (page.children.length > 0) {
-    page.children[0].remove();
-  }
+  // Row 0–1: Auth + onboarding
+  screenWelcome(1, 0);
+  screenMagicLinkSent(2, 0);
+  screenBegin(3, 0);
 
-  const allFrames = [];
+  // Row 1: Dashboard states
+  screenDashboardReady(0, 1);
+  screenDashboardComplete(1, 1);
 
-  // Row 0: Marketing & Auth
-  sectionLabel(page, "MARKETING & AUTH", 0, 0);
-  allFrames.push(S01_Landing(0, 0));
-  allFrames.push(S02_Welcome(1, 0));
-  allFrames.push(S03_Begin(2, 0));
-  allFrames.push(S04_Dashboard(3, 0));
+  // Row 1–2: Daily flow
+  screenDailyQuestion(2, 1);
+  screenTeaching(3, 1);
+  screenRecord1(0, 2);
+  screenProcessing(1, 2);
+  screenFeedback(2, 2);
 
-  // Row 1: Question → Processing
-  sectionLabel(page, "DAILY PRACTICE — CORE LOOP", 0, 1);
-  allFrames.push(S05_Question(0, 1));
-  allFrames.push(S06_Teaching(1, 1));
-  allFrames.push(S07_Record1(2, 1));
-  allFrames.push(S08_Processing(3, 1));
+  // Row 2–3: Revise + Record 2 + Compare
+  screenRevise(3, 2);
+  screenExemplar(0, 3);
+  screenRecord2(1, 3);
+  screenCompare(2, 3);
+  screenClosure(3, 3);
 
-  // Row 2: Feedback → Compare
-  sectionLabel(page, "FEEDBACK & REVISION", 0, 2);
-  allFrames.push(S09_Feedback(0, 2));
-  allFrames.push(S10_Revise(1, 2));
-  allFrames.push(S11_Record2(2, 2));
-  allFrames.push(S12_Compare(3, 2));
+  // Row 4: Archive + Settings + Graduation
+  screenArchive(0, 4);
+  screenSettings(1, 4);
+  screenGraduation(2, 4);
 
-  // Row 3: Closure + Graduation
-  sectionLabel(page, "CLOSURE & GRADUATION", 0, 3);
-  allFrames.push(S13_Closure(0, 3));
-  allFrames.push(S14_WeekTransition(1, 3));
-  allFrames.push(S15_Graduation(2, 3));
-
-  // Row 4: Archive + Settings
-  sectionLabel(page, "ARCHIVE & SETTINGS", 0, 4);
-  allFrames.push(S16_Archive(0, 4));
-  allFrames.push(S17_Settings(1, 4));
-
-  allFrames.forEach(f => page.appendChild(f));
-
-  figma.viewport.scrollAndZoomIntoView(allFrames);
-  figma.notify("✓ " + allFrames.length + " screens created!", { timeout: 4000 });
-  figma.closePlugin();
+  figma.viewport.scrollAndZoomIntoView(figma.currentPage.children);
+  figma.closePlugin("✓ 19 screens generated — full Storied flow");
 }
 
-main().catch(err => {
-  console.error("Plugin error:", err);
-  figma.notify("Error: " + (err.message || String(err)), { error: true, timeout: 8000 });
-  figma.closePlugin();
-});
+run();
